@@ -1,0 +1,376 @@
+{
+	"info": {
+		"_postman_id": "a0703a96-f429-4942-a187-183296c55cc3",
+		"name": "API_Automation",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "15312743"
+	},
+	"item": [
+		{
+			"name": "search",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"searchText\", \"nike react\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Verify the response status code is 200\", function(){",
+							"    pm.expect(200).to.eql(pm.response.code);",
+							"});",
+							"",
+							"var responseBody = pm.response.json();",
+							"",
+							"pm.test(\"Verify the response body's success value is true\", function(){",
+							"    pm.expect(true).to.eql(responseBody.success);",
+							"});",
+							"",
+							"pm.test(\"Verify the response body contains valid product name\", function(){",
+							"    const expectedProduct = \"Nike react phantom run flyknit 2\"",
+							"    pm.expect(expectedProduct).to.contains(responseBody.eContext.graphqlResponse.e248uix4m5ibqamf.items[0].name);",
+							"    pm.collectionVariables.set(\"productname\", responseBody.eContext.graphqlResponse.e248uix4m5ibqamf.items[0].name)",
+							"});",
+							"",
+							"pm.collectionVariables.set(\"items\", responseBody.eContext.graphqlResponse.e248uix4m5ibqamf.items)",
+							"",
+							"",
+							"",
+							"",
+							"",
+							"",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://demo.evershop.io/search?keyword={{searchText}}&ajax=true",
+					"protocol": "https",
+					"host": [
+						"demo",
+						"evershop",
+						"io"
+					],
+					"path": [
+						"search"
+					],
+					"query": [
+						{
+							"key": "keyword",
+							"value": "{{searchText}}"
+						},
+						{
+							"key": "ajax",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "prev_viewCart",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var responseBody = pm.response.json();",
+							"if(responseBody.eContext.graphqlResponse.e248uix4m5ibqb7y==null){",
+							"    pm.collectionVariables.set(\"prev_qty\", 0)",
+							"}else{",
+							"    pm.collectionVariables.set(\"prev_qty\", responseBody.eContext.graphqlResponse.e248uix4m5ibqb7y.totalQty)",
+							"}",
+							"",
+							"pm.test(\"Verify the response status code is 200\", function(){",
+							"    pm.expect(200).to.eql(pm.response.code);",
+							"});",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "_ga=GA1.2.769420754.1725049828; __stripe_mid=87e52dc8-a50f-4600-b1a0-3d649c43d5449846ea; sid=s%3ApstX4vh7ljfL1_ZZnjX5SCxNjQrKn--9.TZGDmE6eX8GIZga1qQReMHJkSZkPwpqgg%2BcycfsFmng",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "https://demo.evershop.io/cart?ajax=true",
+					"protocol": "https",
+					"host": [
+						"demo",
+						"evershop",
+						"io"
+					],
+					"path": [
+						"cart"
+					],
+					"query": [
+						{
+							"key": "ajax",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addProductToCart",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function getRandomInt(min, max) {",
+							"  const minCeiled = Math.ceil(min);",
+							"  const maxFloored = Math.floor(max);",
+							"  return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled);",
+							"}",
+							"const index = getRandomInt(0, 3);",
+							"const qty = getRandomInt(1, 3);",
+							"console.log(\"qty: \"+qty);",
+							"const itemsList = pm.collectionVariables.get(\"items\");",
+							"pm.collectionVariables.set(\"selected_sku\", itemsList[index].sku);",
+							"pm.collectionVariables.set(\"selected_qty\", qty);",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Verify the response status code is 200\", function(){",
+							"    pm.expect(200).to.eql(pm.response.code);",
+							"});",
+							"",
+							"var responseBody = pm.response.json();",
+							"",
+							"pm.test(\"Verify product SKU\", function () {",
+							"    const actual_sku = responseBody.data.item.product_sku;",
+							"    const expected_sku = pm.collectionVariables.get(\"selected_sku\");",
+							"    pm.expect(expected_sku).to.eql(actual_sku);",
+							"});",
+							"",
+							"pm.test(\"Verify product quantity\", function () {",
+							"    const expected_qty = pm.collectionVariables.get(\"selected_qty\");",
+							"    const actual_qty = responseBody.data.item.qty;",
+							"    pm.expect(expected_qty).to.eql(actual_qty);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "_ga=GA1.2.769420754.1725049828; __stripe_mid=87e52dc8-a50f-4600-b1a0-3d649c43d5449846ea; sid=s%3ApstX4vh7ljfL1_ZZnjX5SCxNjQrKn--9.TZGDmE6eX8GIZga1qQReMHJkSZkPwpqgg%2BcycfsFmng",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"sku\": \"{{selected_sku}}\",\n    \"qty\": \"{{selected_qty}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://demo.evershop.io/api/cart/mine/items",
+					"protocol": "https",
+					"host": [
+						"demo",
+						"evershop",
+						"io"
+					],
+					"path": [
+						"api",
+						"cart",
+						"mine",
+						"items"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "post_viewCart",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Verify the response status code is 200\", function(){",
+							"    pm.expect(200).to.eql(pm.response.code);",
+							"});",
+							"",
+							"var responseBody = pm.response.json();",
+							"",
+							"pm.test(\"Verify cart's totalQty quantity\", function () {",
+							"    const expected_qty = pm.collectionVariables.get(\"prev_qty\")+ pm.collectionVariables.get(\"selected_qty\");",
+							"    const actual_qty = responseBody.eContext.graphqlResponse.e248uix4m5ibqb7y.totalQty;",
+							"    pm.expect(expected_qty).to.eql(actual_qty);",
+							"});",
+							"",
+							"",
+							"",
+							"pm.collectionVariables.get(\"variable_key\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"packages": {},
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "_ga=GA1.2.769420754.1725049828; __stripe_mid=87e52dc8-a50f-4600-b1a0-3d649c43d5449846ea; sid=s%3ApstX4vh7ljfL1_ZZnjX5SCxNjQrKn--9.TZGDmE6eX8GIZga1qQReMHJkSZkPwpqgg%2BcycfsFmng",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "https://demo.evershop.io/cart?ajax=true",
+					"protocol": "https",
+					"host": [
+						"demo",
+						"evershop",
+						"io"
+					],
+					"path": [
+						"cart"
+					],
+					"query": [
+						{
+							"key": "ajax",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "removeFromCart",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://demo.evershop.io/api/cart/d74986d4-eaf9-4dc7-a655-4be964392e7c/items/0e01d4af-7fb8-406f-be9b-2cc0bc453121",
+					"protocol": "https",
+					"host": [
+						"demo",
+						"evershop",
+						"io"
+					],
+					"path": [
+						"api",
+						"cart",
+						"d74986d4-eaf9-4dc7-a655-4be964392e7c",
+						"items",
+						"0e01d4af-7fb8-406f-be9b-2cc0bc453121"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": "https://demo.evershop.io/",
+			"type": "string"
+		},
+		{
+			"key": "searchText",
+			"value": ""
+		},
+		{
+			"key": "productname",
+			"value": ""
+		},
+		{
+			"key": "items",
+			"value": ""
+		},
+		{
+			"key": "selected_sku",
+			"value": ""
+		},
+		{
+			"key": "selected_qty",
+			"value": ""
+		},
+		{
+			"key": "prev_qty",
+			"value": ""
+		}
+	]
+}
