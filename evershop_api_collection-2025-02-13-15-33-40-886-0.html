@@ -1,0 +1,2119 @@
+<!DOCTYPE html>
+<html lang="en" style="overflow-y: scroll;">
+<head>
+  <meta charset="UTF-8">
+  <title>Newman Summary Report</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/styles/default.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.css"/>
+
+<style>
+code.renderMarkdown table, code.renderMarkdown th, code.renderMarkdown td {
+    border: 1px solid black;
+    width: max-content;
+    padding: .75rem;
+}
+
+.theme-dark {
+    --background-color: #222;
+    --bg-card-deck: #444444;
+    --text-color: #ccd2d8;
+    --tab-border: solid 1px #444;
+    --success: #3c9372;
+    --failure: #c24a3f;
+    --warning: #d28c23;
+    --info: #4083b6;
+    --badge-outline: #3c9372;
+    --badge-bg: #cdd3db;
+    --badge-text: #ccd2d9;
+    --failure-row: #c24a3f;
+    --warning-row: #d28c23;
+    --card-bg: #444;
+    --card-footer: #4f5758;
+    --form-input: #ececb5;
+    --hov-text: #d2dae5;
+    --h4-text: #ccd1d9;
+}
+
+.theme-light {
+    --tab-border: solid 1px #fff;
+    --text-color: #000000;
+    --success: #42a745;
+    --failure: #dc3544;
+    --warning: #f4c10b;
+    --info: #49a1b8;
+    --badge-outline: #040411;
+    --badge-bg: #f8f9fa;
+    --badge-text: #fff;
+    --failure-row: #f5c6cb;
+    --warning-row: #ffeeba;
+    --card-bg: #f7f7f7;
+    --hov-text: #fff;
+    --h4-text: #ffffff;
+}
+
+body {
+  padding-top:30px;
+  background-color: var(--background-color)!important;
+  color: var(--text-color);
+}
+
+#execution-data {
+  padding: 10px;
+  border: var(--tab-border);
+  border-top: none;
+}
+
+.nav-tabs {
+  padding-top: 10px;
+  height: 105px;
+  overflow-y: auto;
+}
+
+body.theme-dark .card-header {
+    background-color: #444;
+}
+
+body.theme-light .card-header {
+    background-color: #f7f7f7;
+}
+
+.card-footer {
+    padding: .75rem 1.25rem;
+    background-color: var(--card-footer);
+}
+
+.card-deck {
+    background-color: var(--bg-card-deck)!important;
+}
+.form-control {
+    background: var(--form-input);
+}
+
+.custom-tab {
+  padding: 10px 15px;
+  margin-right: 0px;
+  height: 47px;
+  width: 69px;
+  text-align: center;
+  border: var(--tab-border);
+  border-bottom: none;
+  cursor:pointer;
+}
+
+body.theme-dark .text-white {
+    color: #ccd2d9!important;
+}
+h4 {
+    color: var(--h4-text);
+}
+
+body.theme-dark h1 {
+    color: #ccd2da;
+}
+
+body.theme-dark .bg-light>td {
+    background: #4f5858!important;
+}
+
+body.theme-dark .hljs {
+    background: #0a0a0ab0!important;
+    color: #8d8787!important;
+}
+
+.bg-info {
+    background-color: var(--info)!important;
+}
+.bg-success {
+    background-color: var(--success)!important;
+}
+
+.alert-success {
+    background-color: var(--success)!important;
+}
+
+.alert-warning {
+    background-color: var(--warning)!important;
+}
+
+.alert-info {
+    background-color: var(--info)!important;
+}
+
+.bg-warning {
+    background-color: var(--warning)!important;
+}
+
+.badge-warning {
+    color: var(--badge-text)!important;
+    background-color: var(--warning)!important;
+}
+
+.table-warning>td {
+    background-color: var(--warning-row);
+}
+
+.alert-danger {
+    background-color: var(--failure)!important;
+}
+
+body.theme-dark .alert-dark {
+    background-color: #636467!important;
+}
+
+body.theme-dark .text-dark {
+    color: #d1dae4!important;
+}
+
+body.theme-dark .badge-light {
+    color: #212529;
+    background-color: #cdd3db;
+}
+
+body.theme-light .badge-light {
+    color: #212529;
+    background-color: #f8f9fa;
+}
+body.theme-light .bg-danger {
+    background-color: var(--failure)!important;
+}
+
+body.theme-dark .bg-danger {
+    background-color: var(--failure)!important;
+}
+
+.table-danger>td {
+    background-color: var(--failure-row);
+}
+
+body.theme-dark .table .thead-light th {
+    background-color: #4f5858!important;
+    border-color: #dee2e6!important;
+    color: #ccd2d8!important;
+}
+
+.itPassed {
+  background: var(--success);
+  color: white;
+}
+.itFailed {
+  background: var(--failure);
+  color: white;
+}
+
+.resultsInfoPass {
+  color: var(--success);
+  padding-top: 4px;
+}
+
+.resultsInfoFail {
+  color: var(--failure);
+  padding-top: 4px;
+}
+
+.badge-outline-success {
+  color: var(--success);
+  border: 1px solid var(--success);
+  background-color: transparent;
+}
+
+.badge-outline {
+  color: var(--badge-outline);
+  border: 1px solid var(--badge-outline);
+  background-color: transparent;
+}
+
+.btn-outline-success {
+    color: var(--success)!important;
+    border-color: var(--success)!important;
+}
+
+.backToTop:hover {
+  background-color: var(--success);
+  border-color: var(--success);
+  color: var(--hov-text)!important;
+}
+
+.btn-outline-success:hover {
+  background-color: var(--success);
+  border-color: var(--success);
+  color: var(--hov-text)!important;
+}
+
+.btn-outline-secondary {
+  background-color: var(--success)!important;
+  color: var(--hov-text)!important;
+}
+
+body.theme-dark .env-heading {
+    color: #ccd2d9!important;
+}
+
+body, html {
+  height:100%;
+}
+
+.card {
+  overflow:hidden;
+}
+
+body.theme-dark .card-body {
+    background-color: #444;
+}
+
+body.theme-light .card-body {
+    background-color: #f7f7f7;
+}
+
+body.theme-dark .card-body .bg-danger {
+    background-color: var(--failure)!important;
+}
+
+body.theme-light .card-body .bg-danger {
+    background-color: var(--failure)!important;
+}
+
+.card-body .rotate {
+  z-index: 8;
+  float: right;
+  height: 100%;
+}
+
+.card-body .rotate i {
+  color: #14141426;
+  position: absolute;
+  left: 0;
+  left: auto;
+  right: -10px;
+  bottom: 0;
+  display: block;
+  -webkit-transform: rotate(-44deg);
+  -moz-transform: rotate(-44deg);
+  -o-transform: rotate(-44deg);
+  -ms-transform: rotate(-44deg);
+  transform: rotate(-44deg);
+}
+
+.dyn-height {
+  max-height:350px;
+  overflow-y:auto;
+}
+
+.nav-pills .nav-link.active {
+  background-color: transparent!important;
+}
+
+.backToTop {
+  display: none;
+  position: fixed;
+  bottom: 10px;
+  right: 20px;
+  z-index: 99;
+  font-size: 15px;
+  outline: none;
+  cursor: pointer;
+  padding: 15px;
+  border-radius: 4px;
+}
+
+.card-header .fa {
+  transition: .3s transform ease-in-out;
+}
+.card-header .collapsed .fa {
+  transform: rotate(90deg);
+}
+
+.single-line-tabs {
+  padding-top: 10px;
+  height: 60px;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 20px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 0px;
+  bottom: 4px;
+  top: 0;
+  bottom: 0;
+  margin: auto 0;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+  box-shadow: 0 0px 15px #2020203d;
+  background: white;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+input:checked + .slider {
+  background-color: #4083b6;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #4083b6;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(24px);
+  -ms-transform: translateX(24px);
+  transform: translateX(24px);
+  background: white;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+table.dataTable td, table.dataTable tr {
+    vertical-align: middle;
+}
+
+body.theme-dark code {
+    color: #ccd2d8!important;
+}
+
+body.theme-light code {
+    color: #000000!important;
+}
+
+.text-wrap {
+    word-wrap: break-word; 
+    min-width: 600px; 
+    max-width: 600px; 
+    white-space: normal;
+}
+
+</style>
+</head>
+<body class="theme-dark">
+<script>
+    function setTheme(themeName) {
+        localStorage.setItem('theme', themeName);
+        document.body.className = themeName;
+    }
+
+    function toggleTheme() {
+        if (localStorage.getItem('theme') === 'theme-light') {
+            setTheme('theme-dark');
+        } else {
+            setTheme('theme-light');
+        }
+    }
+</script>
+  <div class="container">
+        <div class="container">
+            <label>Light</label>
+            <label id="switch" class="switch">
+                <input type="checkbox" onchange="toggleTheme()" id="slider">
+                <span class="slider round"></span>
+            </label>
+            <label>Dark</label>
+        </div>
+        <div class="card">
+        <div class="card-header">
+            <ul class="nav nav-pills mb-3 nav-justified" id="pills-tab" role="tablist">
+            <li class="nav-item bg-info active" data-toggle="tooltip" title="Click to view the Summary">
+                <a class="nav-link text-white" id="pills-summary-tab" data-toggle="pill" href="#pills-summary" role="tab" aria-controls="pills-summary" aria-selected="true">Summary</a>
+            </li>
+            <li class="nav-item bg-success" data-toggle="tooltip" title="Click to view the Requests">
+                <a class="nav-link text-white" id="pills-requests-tab" data-toggle="pill" href="#pills-requests" role="tab" aria-controls="pills-requests" aria-selected="false">Total Requests <span class="badge badge-light">5</span></a>
+            </li>
+            <li class="nav-item bg-danger" data-toggle="tooltip" title="Click to view the Failed Tests">
+                <a class="nav-link text-white" id="pills-failed-tab" data-toggle="pill" href="#pills-failed" role="tab" aria-controls="pills-failed" aria-selected="false">Failed Tests <span class="badge badge-light">0</span></a>
+            </li>
+            <li class="nav-item bg-warning" data-toggle="tooltip" title="Click to view the Skipped Tests">
+                <a class="nav-link text-white" id="pills-skipped-tab" data-toggle="pill" href="#pills-skipped" role="tab" aria-controls="pills-skipped" aria-selected="false">Skipped Tests <span class="badge badge-light">0</span></a>
+            </li>
+            </ul>
+        <div class="tab-content" id="pills-tabContent">
+            <div class="tab-pane fade show active" id="pills-summary" role="tabcard" aria-labelledby="pills-summary-tab">
+<div class="row">
+  <div class="col-md-9 col-lg-12 main">
+   <h1 class="display-2 text-center">Newman Run Dashboard</h1>
+   <h5 class="text-center">Thursday, 13 February 2025 21:33:40</h5>
+   <div class="row">
+    <div class="col-lg-3 col-md-6">
+     <div class="card text-white card-success">
+      <div class="card-body bg-success">
+       <div class="rotate">
+        <i class="fa fa-retweet fa-5x"></i>
+       </div>
+       <h6 class="text-uppercase">Total Iterations</h6>
+       <h1 class="display-1">1</h1>
+      </div>
+     </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+     <div class="card text-white card-danger">
+      <div class="card-body bg-success">
+       <div class="rotate">
+        <i class="fa fa-list fa-4x"></i>
+       </div>
+       <h6 class="text-uppercase">Total Assertions</h6>
+       <h1 class="display-1">9</h1>
+      </div>
+     </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+     <div class="card text-white card-info">
+      <div class="card-body bg-success">
+       <div class="rotate">
+        <i class="fa fa-plus-circle fa-5x"></i>
+       </div>
+       <h6 class="text-uppercase">Total Failed Tests</h6>
+       <h1 class="display-1">0</h1>
+      </div>
+     </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+     <div class="card text-white card-warning">
+      <div class="card-body bg-success">
+       <div class="rotate">
+        <i class="fa fa-share fa-5x"></i>
+       </div>
+       <h6 class="text-uppercase">Total Skipped Tests</h6>
+       <h1 class="display-1">0</h1>
+      </div>
+     </div>
+    </div>
+   </div>
+   <hr>
+    <div class="row">
+    <div class="col">
+        <div class="row">
+        <div class="col-sm-12 mb-3">
+            <div class="card border-info">
+                <div class="card-body">
+                <h5 class="card-title text-uppercase text-white text-center bg-info">File Information</h5>
+                <span><i class="fas fa-file-code"></i></span><strong> Collection:</strong> batch_9_evershop_api_collection<br>
+                
+                
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-sm-12 mb-3">
+            <div class="card border-info">
+                <div class="card-body">
+                <h5 class="card-title text-uppercase text-white text-center bg-info">Timings and Data</h5>
+                <span><i class="fas fa-stopwatch"></i></span><strong> Total run duration:</strong> 2.1s<br>
+                <span><i class="fas fa-database"></i></span><strong> Total data received:</strong> 14.45KB<br>
+                <span><i class="fas fa-stopwatch"></i></span><strong> Average response time:</strong> 397ms<br>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-sm-12 mb-3">
+            <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead class="thead-inverse">
+                    <tr class="text-center">
+                        <th class="text-uppercase">Summary Item</th>
+                        <th class="text-uppercase">Total</th>
+                        <th class="text-uppercase">Failed</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Requests</td>
+                        <td class="text-center">5</td>
+                        <td class="text-center">0</td>
+                    </tr>
+                    <tr>
+                        <td>Prerequest Scripts</td>
+                        <td class="text-center">7</td>
+                        <td class="text-center">0</td>
+                    </tr>
+                    <tr>
+                        <td>Test Scripts</td>
+                        <td class="text-center">9</td>
+                        <td class="text-center">0</td>
+                    </tr>
+                    <tr class="">
+                        <td>Assertions</td>
+                        <td class="text-center">9</td>
+                        <td class="text-center">0</td>
+                    </tr>
+                    <tr class="">
+                        <td>Skipped Tests</td>
+                        <td class="text-center">0</td>
+                        <td class="text-center">-</td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+        </div>
+        </div>
+    <hr>
+   </div>
+   </div>
+  </div>
+ </div>
+        </div>
+            <div class="tab-pane fade" id="pills-failed" role="tabcard" aria-labelledby="pills-failed-tab">
+                <button id="topOfFailuresScreen" class="btn btn-outline-success btn-sm backToTop" onclick="topFunction()">Go To Top</button>
+
+                <div class="alert alert-success text-uppercase text-center">
+                     <br><br><h1 class="text-center">There are no failed tests <span><i class="far fa-thumbs-up"></i></span></h1><br><br>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="pills-skipped" role="tabcard" aria-labelledby="pills-skipped-tab">
+                <button id="topOfSkippedScreen" class="btn btn-outline-success btn-sm backToTop" onclick="topFunction()">Go To Top</button>
+
+                <div class="alert alert-success text-uppercase text-center">
+                    <br><br><h1 class="text-center">There are no skipped tests <span><i class="far fa-thumbs-up"></i></span></h1><br><br>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="pills-requests" role="tabcard" aria-labelledby="pills-requests-tab">
+
+            <button id="topOfRequestsScreen" class="btn btn-outline-success btn-sm backToTop" onclick="topFunction()">Go To Top</button>
+
+            <div class="btn-group float-right" role="group" aria-label="Button Group">
+                <button id="openAll" class="btn btn-outline-success btn-sm float-right" style="text-align: center; width: 140px;">Expand Folders</button>
+                <button id="openAllRequests" class="btn btn-outline-success btn-sm float-right" style="text-align: center; width: 140px;">Expand Requests</button>
+            </div>
+
+    <div class="text-uppercase" id="execution-menu">
+        <h5>1 Iteration available to view</h5>
+        
+        <nav class="table-responsive">
+        <ul class="nav single-line-tabs" id="iterationList">
+        </ul>
+        </nav>
+    </div>
+    <h6 class="text-uppercase text-muted" id="iterationSelected" style="padding-top: 10px;"></h6>
+	<div class="tab-content" id="execution-data">
+            <div id="folder-e53a2077-856c-4172-b90b-150ae4d08c7b" class="card-deck iteration-0">
+            <div class="row iteration-0">
+                <div class="col-sm-12 mb-3 iteration-0">
+                <div class="card iteration-0">
+                    <div class="card-header  bg-success iteration-0">
+                        <a data-toggle="collapse" href="#" data-target="#collapse-e53a2077-856c-4172-b90b-150ae4d08c7b" aria-expanded="false" aria-controls="collapse" id="requests-e53a2077-856c-4172-b90b-150ae4d08c7b" class="collapsed text-white z-block">
+                    Iteration: 1 - search <i class="float-lg-right fa fa-chevron-down" style="padding-top: 5px;"></i>
+                </a>
+                    </div>
+                    <div id="collapse-e53a2077-856c-4172-b90b-150ae4d08c7b" class="collapse" aria-labelledby="requests-e53a2077-856c-4172-b90b-150ae4d08c7b">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Request Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request Method:</strong> <span class="badge-outline-success badge badge-success"> GET</span><br>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request URL:</strong> <a href="https://demo.evershop.io/search?keyword&#x3D;nike%20react&amp;ajax&#x3D;true" target="_blank">https://demo.evershop.io/search?keyword&#x3D;nike%20react&amp;ajax&#x3D;true</a><br>
+                                    </div>
+                                </div>
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Response Code:</strong> <span class="float-right badge-outline badge badge-success"> 200 - OK</span><br>
+                                    <span><i class="fas fa-stopwatch"></i></span><strong> Mean time per request:</strong> <span class="float-right badge-outline badge badge-success"> 924ms</span><br>
+                                    <span><i class="fas fa-database"></i></span><strong> Mean size per request:</strong> <span class="float-right badge-outline badge badge-success"> 4.33KB</span><br>
+                                    <hr>
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Test Pass Percentage</h5>
+                                    <div>
+                                        <div class="progress" style="height: 40px;">
+                                            <div class="progress-bar  bg-success" style="width: 100%" role="progressbar">
+                                            <h5 style="padding-top:5px;"><strong>100 %</strong></h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-uppercase text-white text-center bg-info">Request Headers</h5>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                            <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="text-nowrap">User-Agent</td>
+                                                        <td class="text-wrap">PostmanRuntime/7.39.1</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept</td>
+                                                        <td class="text-wrap">*/*</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Cache-Control</td>
+                                                        <td class="text-wrap">no-cache</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Postman-Token</td>
+                                                        <td class="text-wrap">152c8016-43c2-4eac-9086-af930729dbb3</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Host</td>
+                                                        <td class="text-wrap">demo.evershop.io</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept-Encoding</td>
+                                                        <td class="text-wrap">gzip, deflate, br</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Connection</td>
+                                                        <td class="text-wrap">keep-alive</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Headers</h5>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                        <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="text-nowrap">Content-Length</td>
+                                                    <td class="text-wrap">4438</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Content-Type</td>
+                                                    <td class="text-wrap">application/json; charset&#x3D;utf-8</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Date</td>
+                                                    <td class="text-wrap">Thu, 13 Feb 2025 15:33:39 GMT</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">ETag</td>
+                                                    <td class="text-wrap">W/&quot;1156-Fr4sSY3c8BkYWbxxpBW4a5lx4os&quot;</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Set-Cookie</td>
+                                                    <td class="text-wrap">sid&#x3D;s%3AegM_H9gwwAemvfqn1Mfjp45E5d9qoYxk.e6evGPv3gDRre5eOOhAR%2F3uwMuaepWvtapdtvO%2BO26k; Path&#x3D;/; Expires&#x3D;Fri, 14 Feb 2025 15:33:39 GMT; HttpOnly</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">request-context</td>
+                                                    <td class="text-wrap">appId&#x3D;cid-v1:</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">X-Powered-By</td>
+                                                    <td class="text-wrap">Express</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Body</h5>
+                                        <div class="dyn-height">
+                                                <pre><code id="copyText-7c276712-2dda-47a8-8c26-aad9ebabbf58" class="prettyPrint">{&quot;success&quot;:true,&quot;eContext&quot;:{&quot;graphqlResponse&quot;:{&quot;e248uix4m5ibqamc&quot;:&quot;https://demo.evershop.io/search&quot;,&quot;e248uix4m5ibqamd&quot;:{&quot;total&quot;:3,&quot;currentFilters&quot;:[{&quot;key&quot;:&quot;keyword&quot;,&quot;operation&quot;:&quot;eq&quot;,&quot;value&quot;:&quot;nike react&quot;},{&quot;key&quot;:&quot;page&quot;,&quot;operation&quot;:&quot;eq&quot;,&quot;value&quot;:&quot;1&quot;},{&quot;key&quot;:&quot;limit&quot;,&quot;operation&quot;:&quot;eq&quot;,&quot;value&quot;:&quot;20&quot;}]},&quot;e248uix4m5ibqamf&quot;:{&quot;items&quot;:[{&quot;productId&quot;:180,&quot;name&quot;:&quot;Nike react phantom run flyknit 2&quot;,&quot;sku&quot;:&quot;NJC48508-Pink-X&quot;,&quot;price&quot;:{&quot;regular&quot;:{&quot;value&quot;:718,&quot;text&quot;:&quot;$718.00&quot;},&quot;special&quot;:{&quot;value&quot;:718,&quot;text&quot;:&quot;$718.00&quot;}},&quot;image&quot;:{&quot;alt&quot;:&quot;Nike react phantom run flyknit 2&quot;,&quot;url&quot;:&quot;https://demositefiles.blob.core.windows.net/images/catalog/1742/9873/plv3335-Pink-listing.png&quot;},&quot;url&quot;:&quot;/men/nike-react-phantom-run-flyknit-2-180&quot;},{&quot;productId&quot;:171,&quot;name&quot;:&quot;Nike react infinity run flyknit&quot;,&quot;sku&quot;:&quot;NJC44141-Purple-L&quot;,&quot;price&quot;:{&quot;regular&quot;:{&quot;value&quot;:543,&quot;text&quot;:&quot;$543.00&quot;},&quot;special&quot;:{&quot;value&quot;:543,&quot;text&quot;:&quot;$543.00&quot;}},&quot;image&quot;:{&quot;alt&quot;:&quot;Nike react infinity run flyknit&quot;,&quot;url&quot;:&quot;https://demositefiles.blob.core.windows.net/images/catalog/9381/3866/plv3878-Purple-listing.png&quot;},&quot;url&quot;:&quot;/nike-react-infinity-run-flyknit-171&quot;},{&quot;productId&quot;:160,&quot;name&quot;:&quot;Nike odyssey react flyknit 2&quot;,&quot;sku&quot;:&quot;NJC93155-Pink-XL&quot;,&quot;price&quot;:{&quot;regular&quot;:{&quot;value&quot;:857,&quot;text&quot;:&quot;$857.00&quot;},&quot;special&quot;:{&quot;value&quot;:857,&quot;text&quot;:&quot;$857.00&quot;}},&quot;image&quot;:{&quot;alt&quot;:&quot;Nike odyssey react flyknit 2&quot;,&quot;url&quot;:&quot;https://demositefiles.blob.core.windows.net/images/catalog/1939/9584/plv6734-Pink-listing.png&quot;},&quot;url&quot;:&quot;/women/nike-odyssey-react-flyknit-2-160&quot;}]},&quot;e248uix4m5ibqami&quot;:&quot;https://demo.evershop.io/cart&quot;,&quot;e248uix4m5ibqamj&quot;:null,&quot;e248uix4m5ibqamk&quot;:{&quot;breadcrumbs&quot;:[{&quot;title&quot;:&quot;Home&quot;,&quot;url&quot;:&quot;/&quot;},{&quot;title&quot;:&quot;Search results for: nike react&quot;,&quot;url&quot;:&quot;https://demo.evershop.io/search?keyword&#x3D;nike%20react&amp;ajax&#x3D;true&quot;}]},&quot;e248uix4m5ibqaml&quot;:{&quot;copyRight&quot;:&quot;© 2022 Evershop. All Rights Reserved.&quot;},&quot;e248uix4m5ibqamm&quot;:{&quot;title&quot;:&quot;Search results for: nike react&quot;,&quot;description&quot;:&quot;Search results for: nike react&quot;},&quot;e248uix4m5ibqamn&quot;:{&quot;headTags&quot;:{&quot;metas&quot;:[{&quot;name&quot;:&quot;robots&quot;,&quot;content&quot;:&quot;noindex&quot;,&quot;charSet&quot;:null,&quot;httpEquiv&quot;:null,&quot;property&quot;:null,&quot;itemProp&quot;:null,&quot;itemType&quot;:null,&quot;itemID&quot;:null,&quot;lang&quot;:null}],&quot;links&quot;:[],&quot;scripts&quot;:[],&quot;base&quot;:null}},&quot;e248uix4m5ibqamo&quot;:{&quot;logo&quot;:{&quot;src&quot;:null,&quot;alt&quot;:null,&quot;width&quot;:null,&quot;height&quot;:null}},&quot;e248uix4m5ibqamp&quot;:null,&quot;e248uix4m5ibqamq&quot;:&quot;https://demo.evershop.io/account&quot;,&quot;e248uix4m5ibqamr&quot;:&quot;https://demo.evershop.io/account/login&quot;,&quot;e8kjds2qm73i26bu&quot;:{&quot;menus&quot;:[{&quot;id&quot;:&quot;8kjds2qm73i26cj&quot;,&quot;name&quot;:&quot;Shop ❤️&quot;,&quot;url&quot;:&quot;javascript:void(0)&quot;,&quot;type&quot;:&quot;custom&quot;,&quot;uuid&quot;:&quot;javascript:void(0)&quot;,&quot;children&quot;:[{&quot;name&quot;:&quot;Men&quot;,&quot;url&quot;:&quot;/men&quot;,&quot;type&quot;:&quot;custom&quot;,&quot;uuid&quot;:&quot;/men&quot;},{&quot;name&quot;:&quot;Women&quot;,&quot;url&quot;:&quot;/women&quot;,&quot;type&quot;:&quot;custom&quot;,&quot;uuid&quot;:&quot;/women&quot;}]},{&quot;id&quot;:&quot;8kjds2qm73i26cm&quot;,&quot;name&quot;:&quot;About us&quot;,&quot;url&quot;:&quot;/page/about-us&quot;,&quot;type&quot;:&quot;custom&quot;,&quot;uuid&quot;:&quot;/page/about-us&quot;,&quot;children&quot;:[]}],&quot;isMain&quot;:true,&quot;className&quot;:&quot;&quot;}},&quot;propsMap&quot;:{&quot;137dcfd8bf7950dd6201684efdcb40a1&quot;:[{&quot;origin&quot;:&quot;searchPageUrl&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqamc&quot;}],&quot;53a5c4e443c686e83ed07c4024cb9005&quot;:[],&quot;cd65308b660ab08acbf37587da8b8cec&quot;:[{&quot;origin&quot;:&quot;products&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqamd&quot;}],&quot;8258d32f10368fb12b468d1934c39e7c&quot;:[{&quot;origin&quot;:&quot;products&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqamf&quot;}],&quot;73803fc0a7d90e8e0ef8a16b1a64f089&quot;:[],&quot;8e6938817356c0764e16d9dc7d99d4d3&quot;:[],&quot;5248a628c0ba0eb2edc726fbc70778f8&quot;:[{&quot;origin&quot;:&quot;cartUrl&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqami&quot;},{&quot;origin&quot;:&quot;cart&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqamj&quot;}],&quot;45515ab09f9ce8f561fc40ca4ffb7b2f&quot;:[{&quot;origin&quot;:&quot;pageInfo&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqamk&quot;}],&quot;03ce62a99b643c53cea33f6fc2c573f5&quot;:[{&quot;origin&quot;:&quot;themeConfig&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqaml&quot;}],&quot;170528765f0295e4db900fd92ea387bc&quot;:[{&quot;origin&quot;:&quot;pageInfo&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqamm&quot;},{&quot;origin&quot;:&quot;themeConfig&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqamn&quot;}],&quot;2aa0bf53e05360bd37f2dd0982998263&quot;:[],&quot;a20b83833c6ae10ded5077b0943cfef5&quot;:[{&quot;origin&quot;:&quot;themeConfig&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqamo&quot;}],&quot;18bf66723f1e3394e1ebb5dce01e8097&quot;:[],&quot;fef4b1d9ae2122930f9c33edbb982d6e&quot;:[{&quot;origin&quot;:&quot;customer&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqamp&quot;},{&quot;origin&quot;:&quot;accountUrl&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqamq&quot;},{&quot;origin&quot;:&quot;loginUrl&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqamr&quot;}],&quot;b9b0aede0abb0546fe77c67089bdd6f5&quot;:[{&quot;origin&quot;:&quot;collection&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqams&quot;}],&quot;78d4735155d485f34d387c8394613fb7&quot;:[{&quot;origin&quot;:&quot;textWidget&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqamw&quot;}],&quot;d71e8a0220472a4a5360ae305aa98d5b&quot;:[{&quot;origin&quot;:&quot;basicMenuWidget&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqan0&quot;}],&quot;e9869af9cb99540caac4704f0a1d6de86&quot;:[{&quot;origin&quot;:&quot;basicMenuWidget&quot;,&quot;alias&quot;:&quot;e8kjds2qm73i26bu&quot;}]},&quot;widgets&quot;:[{&quot;sortOrder&quot;:1,&quot;areaId&quot;:[&quot;header&quot;],&quot;type&quot;:&quot;basic_menu&quot;,&quot;id&quot;:&quot;e9869af9cb99540caac4704f0a1d6de86&quot;}],&quot;notifications&quot;:[]}}</code></pre>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button class="btn btn-outline-secondary btn-sm copyButton" type="button" data-clipboard-action="copy" data-clipboard-target="#copyText-7c276712-2dda-47a8-8c26-aad9ebabbf58">Copy to Clipboard</button>
+                                        </div>
+                                </div>
+                            </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="card border-info">
+                                <div class="card-body">
+                                <h5 class="card-title text-uppercase text-white text-center bg-info">Test Information</h5>
+                                    <div class="table-responsive text-nowrap">
+                                        <table class="datatable table table-hover">
+                                        <thead><tr class="text-center"><th>Name</th><th>Passed</th><th>Failed</th><th>Skipped</th></tr></thead>
+                                            <tbody>
+                                                <tr >
+                                                    <td >Verify the response status code is 200</td>
+                                                    <td class="text-center bg-success">1</td>
+                                                    <td class="text-center ">0</td>
+                                                    <td class="text-center ">0</td>
+                                                </tr>
+                                                <tr >
+                                                    <td >Verify the response body&#x27;s success value is true</td>
+                                                    <td class="text-center bg-success">1</td>
+                                                    <td class="text-center ">0</td>
+                                                    <td class="text-center ">0</td>
+                                                </tr>
+                                                <tr >
+                                                    <td >Verify the response body contains valid product name</td>
+                                                    <td class="text-center bg-success">1</td>
+                                                    <td class="text-center ">0</td>
+                                                    <td class="text-center ">0</td>
+                                                </tr>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr class="bg-light">
+                                                    <td><strong>Total</strong></td>
+                                                    <td class="text-center">3</td>
+                                                    <td class="text-center">0</td>
+                                                    <td class="text-center">0</td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                    <div class="row d-none">
+                                    <div class="col-sm-12 mb-3">
+                                        <div class="card-deck">
+                                        <div class="card border-danger" style="width: 50rem;">
+                                            <div class="card-body">
+                                                <h5 class="card-title text-uppercase text-white text-center bg-danger">Test Failure</h5>
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover">
+                                                    <thead><tr class="text-nowrap"><th>Test Name</th><th>Assertion Error</th></tr></thead>
+                                                        <tbody>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+            <div id="folder-80adeaaf-2bf4-4ba4-8a0b-c8868e8005d7" class="card-deck iteration-0">
+            <div class="row iteration-0">
+                <div class="col-sm-12 mb-3 iteration-0">
+                <div class="card iteration-0">
+                    <div class="card-header  bg-success iteration-0">
+                        <a data-toggle="collapse" href="#" data-target="#collapse-80adeaaf-2bf4-4ba4-8a0b-c8868e8005d7" aria-expanded="false" aria-controls="collapse" id="requests-80adeaaf-2bf4-4ba4-8a0b-c8868e8005d7" class="collapsed text-white z-block">
+                    Iteration: 1 - prev_viewCart <i class="float-lg-right fa fa-chevron-down" style="padding-top: 5px;"></i>
+                </a>
+                    </div>
+                    <div id="collapse-80adeaaf-2bf4-4ba4-8a0b-c8868e8005d7" class="collapse" aria-labelledby="requests-80adeaaf-2bf4-4ba4-8a0b-c8868e8005d7">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Request Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request Method:</strong> <span class="badge-outline-success badge badge-success"> GET</span><br>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request URL:</strong> <a href="https://demo.evershop.io/cart?ajax&#x3D;true" target="_blank">https://demo.evershop.io/cart?ajax&#x3D;true</a><br>
+                                    </div>
+                                </div>
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Response Code:</strong> <span class="float-right badge-outline badge badge-success"> 200 - OK</span><br>
+                                    <span><i class="fas fa-stopwatch"></i></span><strong> Mean time per request:</strong> <span class="float-right badge-outline badge badge-success"> 241ms</span><br>
+                                    <span><i class="fas fa-database"></i></span><strong> Mean size per request:</strong> <span class="float-right badge-outline badge badge-success"> 3.26KB</span><br>
+                                    <hr>
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Test Pass Percentage</h5>
+                                    <div>
+                                        <div class="progress" style="height: 40px;">
+                                            <div class="progress-bar  bg-success" style="width: 100%" role="progressbar">
+                                            <h5 style="padding-top:5px;"><strong>100 %</strong></h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-uppercase text-white text-center bg-info">Request Headers</h5>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                            <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="text-nowrap">Cookie</td>
+                                                        <td class="text-wrap">sid&#x3D;s%3AegM_H9gwwAemvfqn1Mfjp45E5d9qoYxk.e6evGPv3gDRre5eOOhAR%2F3uwMuaepWvtapdtvO%2BO26k</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">User-Agent</td>
+                                                        <td class="text-wrap">PostmanRuntime/7.39.1</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept</td>
+                                                        <td class="text-wrap">*/*</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Cache-Control</td>
+                                                        <td class="text-wrap">no-cache</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Postman-Token</td>
+                                                        <td class="text-wrap">832b71ac-bf28-4131-b5ab-d8b98f944924</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Host</td>
+                                                        <td class="text-wrap">demo.evershop.io</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept-Encoding</td>
+                                                        <td class="text-wrap">gzip, deflate, br</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Connection</td>
+                                                        <td class="text-wrap">keep-alive</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Headers</h5>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                        <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="text-nowrap">Content-Length</td>
+                                                    <td class="text-wrap">3339</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Content-Type</td>
+                                                    <td class="text-wrap">application/json; charset&#x3D;utf-8</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Date</td>
+                                                    <td class="text-wrap">Thu, 13 Feb 2025 15:33:39 GMT</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">ETag</td>
+                                                    <td class="text-wrap">W/&quot;d0b-j9KREKI2Y/O0dBG0zMfvhmHgLkI&quot;</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">request-context</td>
+                                                    <td class="text-wrap">appId&#x3D;cid-v1:</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">X-Powered-By</td>
+                                                    <td class="text-wrap">Express</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Body</h5>
+                                        <div class="dyn-height">
+                                                <pre><code id="copyText-e514d056-6575-4ba6-a294-52cdc9a7e5a5" class="prettyPrint">{&quot;success&quot;:true,&quot;eContext&quot;:{&quot;graphqlResponse&quot;:{&quot;e248uix4m5ibqb7v&quot;:&quot;https://demo.evershop.io/search&quot;,&quot;e248uix4m5ibqb7w&quot;:&quot;https://demo.evershop.io/cart&quot;,&quot;e248uix4m5ibqb7x&quot;:null,&quot;e248uix4m5ibqb7y&quot;:null,&quot;e248uix4m5ibqb7z&quot;:{&quot;priceIncludingTax&quot;:true},&quot;e248uix4m5ibqb80&quot;:null,&quot;e248uix4m5ibqb81&quot;:{&quot;priceIncludingTax&quot;:true},&quot;e248uix4m5ibqb82&quot;:&quot;https://demo.evershop.io/checkout&quot;,&quot;e248uix4m5ibqb83&quot;:{&quot;breadcrumbs&quot;:[{&quot;title&quot;:&quot;Home&quot;,&quot;url&quot;:&quot;/&quot;},{&quot;title&quot;:&quot;Shopping cart&quot;,&quot;url&quot;:&quot;https://demo.evershop.io/cart?ajax&#x3D;true&quot;}]},&quot;e248uix4m5ibqb84&quot;:{&quot;copyRight&quot;:&quot;© 2022 Evershop. All Rights Reserved.&quot;},&quot;e248uix4m5ibqb85&quot;:{&quot;title&quot;:&quot;Shopping cart&quot;,&quot;description&quot;:&quot;Shopping cart&quot;},&quot;e248uix4m5ibqb86&quot;:{&quot;headTags&quot;:{&quot;metas&quot;:[{&quot;name&quot;:&quot;robots&quot;,&quot;content&quot;:&quot;noindex&quot;,&quot;charSet&quot;:null,&quot;httpEquiv&quot;:null,&quot;property&quot;:null,&quot;itemProp&quot;:null,&quot;itemType&quot;:null,&quot;itemID&quot;:null,&quot;lang&quot;:null}],&quot;links&quot;:[],&quot;scripts&quot;:[],&quot;base&quot;:null}},&quot;e248uix4m5ibqb87&quot;:{&quot;logo&quot;:{&quot;src&quot;:null,&quot;alt&quot;:null,&quot;width&quot;:null,&quot;height&quot;:null}},&quot;e248uix4m5ibqb88&quot;:null,&quot;e248uix4m5ibqb89&quot;:&quot;https://demo.evershop.io/account&quot;,&quot;e248uix4m5ibqb8a&quot;:&quot;https://demo.evershop.io/account/login&quot;,&quot;e248uix4m5ibqb8b&quot;:null,&quot;e8kjds2qm73i26m9&quot;:{&quot;menus&quot;:[{&quot;id&quot;:&quot;8kjds2qm73i26mu&quot;,&quot;name&quot;:&quot;Shop ❤️&quot;,&quot;url&quot;:&quot;javascript:void(0)&quot;,&quot;type&quot;:&quot;custom&quot;,&quot;uuid&quot;:&quot;javascript:void(0)&quot;,&quot;children&quot;:[{&quot;name&quot;:&quot;Men&quot;,&quot;url&quot;:&quot;/men&quot;,&quot;type&quot;:&quot;custom&quot;,&quot;uuid&quot;:&quot;/men&quot;},{&quot;name&quot;:&quot;Women&quot;,&quot;url&quot;:&quot;/women&quot;,&quot;type&quot;:&quot;custom&quot;,&quot;uuid&quot;:&quot;/women&quot;}]},{&quot;id&quot;:&quot;8kjds2qm73i26mx&quot;,&quot;name&quot;:&quot;About us&quot;,&quot;url&quot;:&quot;/page/about-us&quot;,&quot;type&quot;:&quot;custom&quot;,&quot;uuid&quot;:&quot;/page/about-us&quot;,&quot;children&quot;:[]}],&quot;isMain&quot;:true,&quot;className&quot;:&quot;&quot;}},&quot;propsMap&quot;:{&quot;137dcfd8bf7950dd6201684efdcb40a1&quot;:[{&quot;origin&quot;:&quot;searchPageUrl&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqb7v&quot;}],&quot;5248a628c0ba0eb2edc726fbc70778f8&quot;:[{&quot;origin&quot;:&quot;cartUrl&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqb7w&quot;},{&quot;origin&quot;:&quot;cart&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqb7x&quot;}],&quot;87b5a6343580ffba5d3cd5dcf3da9b15&quot;:[{&quot;origin&quot;:&quot;cart&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqb7y&quot;},{&quot;origin&quot;:&quot;setting&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqb7z&quot;}],&quot;0970d39aae36909e09c0cbec65369c02&quot;:[{&quot;origin&quot;:&quot;cart&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqb80&quot;},{&quot;origin&quot;:&quot;setting&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqb81&quot;},{&quot;origin&quot;:&quot;checkoutUrl&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqb82&quot;}],&quot;45515ab09f9ce8f561fc40ca4ffb7b2f&quot;:[{&quot;origin&quot;:&quot;pageInfo&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqb83&quot;}],&quot;03ce62a99b643c53cea33f6fc2c573f5&quot;:[{&quot;origin&quot;:&quot;themeConfig&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqb84&quot;}],&quot;170528765f0295e4db900fd92ea387bc&quot;:[{&quot;origin&quot;:&quot;pageInfo&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqb85&quot;},{&quot;origin&quot;:&quot;themeConfig&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqb86&quot;}],&quot;2aa0bf53e05360bd37f2dd0982998263&quot;:[],&quot;a20b83833c6ae10ded5077b0943cfef5&quot;:[{&quot;origin&quot;:&quot;themeConfig&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqb87&quot;}],&quot;18bf66723f1e3394e1ebb5dce01e8097&quot;:[],&quot;fef4b1d9ae2122930f9c33edbb982d6e&quot;:[{&quot;origin&quot;:&quot;customer&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqb88&quot;},{&quot;origin&quot;:&quot;accountUrl&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqb89&quot;},{&quot;origin&quot;:&quot;loginUrl&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqb8a&quot;}],&quot;8bdf6e07d5f321c363037c0ecd754c6d&quot;:[{&quot;origin&quot;:&quot;cart&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqb8b&quot;}],&quot;b9b0aede0abb0546fe77c67089bdd6f5&quot;:[{&quot;origin&quot;:&quot;collection&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqb8c&quot;}],&quot;78d4735155d485f34d387c8394613fb7&quot;:[{&quot;origin&quot;:&quot;textWidget&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqb8g&quot;}],&quot;d71e8a0220472a4a5360ae305aa98d5b&quot;:[{&quot;origin&quot;:&quot;basicMenuWidget&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqb8k&quot;}],&quot;e9869af9cb99540caac4704f0a1d6de86&quot;:[{&quot;origin&quot;:&quot;basicMenuWidget&quot;,&quot;alias&quot;:&quot;e8kjds2qm73i26m9&quot;}]},&quot;widgets&quot;:[{&quot;sortOrder&quot;:1,&quot;areaId&quot;:[&quot;header&quot;],&quot;type&quot;:&quot;basic_menu&quot;,&quot;id&quot;:&quot;e9869af9cb99540caac4704f0a1d6de86&quot;}],&quot;notifications&quot;:[]}}</code></pre>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button class="btn btn-outline-secondary btn-sm copyButton" type="button" data-clipboard-action="copy" data-clipboard-target="#copyText-e514d056-6575-4ba6-a294-52cdc9a7e5a5">Copy to Clipboard</button>
+                                        </div>
+                                </div>
+                            </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="card border-info">
+                                <div class="card-body">
+                                <h5 class="card-title text-uppercase text-white text-center bg-info">Test Information</h5>
+                                    <div class="table-responsive text-nowrap">
+                                        <table class="datatable table table-hover">
+                                        <thead><tr class="text-center"><th>Name</th><th>Passed</th><th>Failed</th><th>Skipped</th></tr></thead>
+                                            <tbody>
+                                                <tr >
+                                                    <td >Verify the response status code is 200</td>
+                                                    <td class="text-center bg-success">1</td>
+                                                    <td class="text-center ">0</td>
+                                                    <td class="text-center ">0</td>
+                                                </tr>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr class="bg-light">
+                                                    <td><strong>Total</strong></td>
+                                                    <td class="text-center">1</td>
+                                                    <td class="text-center">0</td>
+                                                    <td class="text-center">0</td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                    <div class="row d-none">
+                                    <div class="col-sm-12 mb-3">
+                                        <div class="card-deck">
+                                        <div class="card border-danger" style="width: 50rem;">
+                                            <div class="card-body">
+                                                <h5 class="card-title text-uppercase text-white text-center bg-danger">Test Failure</h5>
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover">
+                                                    <thead><tr class="text-nowrap"><th>Test Name</th><th>Assertion Error</th></tr></thead>
+                                                        <tbody>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+            <div id="folder-8303cdc9-ca66-442e-a7fe-6269fcf292c9" class="card-deck iteration-0">
+            <div class="row iteration-0">
+                <div class="col-sm-12 mb-3 iteration-0">
+                <div class="card iteration-0">
+                    <div class="card-header  bg-success iteration-0">
+                        <a data-toggle="collapse" href="#" data-target="#collapse-8303cdc9-ca66-442e-a7fe-6269fcf292c9" aria-expanded="false" aria-controls="collapse" id="requests-8303cdc9-ca66-442e-a7fe-6269fcf292c9" class="collapsed text-white z-block">
+                    Iteration: 1 - addProductToCart <i class="float-lg-right fa fa-chevron-down" style="padding-top: 5px;"></i>
+                </a>
+                    </div>
+                    <div id="collapse-8303cdc9-ca66-442e-a7fe-6269fcf292c9" class="collapse" aria-labelledby="requests-8303cdc9-ca66-442e-a7fe-6269fcf292c9">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Request Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request Method:</strong> <span class="badge-outline-success badge badge-success"> POST</span><br>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request URL:</strong> <a href="https://demo.evershop.io/api/cart/mine/items" target="_blank">https://demo.evershop.io/api/cart/mine/items</a><br>
+                                    </div>
+                                </div>
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Response Code:</strong> <span class="float-right badge-outline badge badge-success"> 200 - OK</span><br>
+                                    <span><i class="fas fa-stopwatch"></i></span><strong> Mean time per request:</strong> <span class="float-right badge-outline badge badge-success"> 254ms</span><br>
+                                    <span><i class="fas fa-database"></i></span><strong> Mean size per request:</strong> <span class="float-right badge-outline badge badge-success"> 1.07KB</span><br>
+                                    <hr>
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Test Pass Percentage</h5>
+                                    <div>
+                                        <div class="progress" style="height: 40px;">
+                                            <div class="progress-bar  bg-success" style="width: 100%" role="progressbar">
+                                            <h5 style="padding-top:5px;"><strong>100 %</strong></h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-uppercase text-white text-center bg-info">Request Headers</h5>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                            <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="text-nowrap">Cookie</td>
+                                                        <td class="text-wrap">sid&#x3D;s%3AegM_H9gwwAemvfqn1Mfjp45E5d9qoYxk.e6evGPv3gDRre5eOOhAR%2F3uwMuaepWvtapdtvO%2BO26k</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Content-Type</td>
+                                                        <td class="text-wrap">application/json</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">User-Agent</td>
+                                                        <td class="text-wrap">PostmanRuntime/7.39.1</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept</td>
+                                                        <td class="text-wrap">*/*</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Cache-Control</td>
+                                                        <td class="text-wrap">no-cache</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Postman-Token</td>
+                                                        <td class="text-wrap">c3e1f064-b876-4376-9403-7daf27597604</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Host</td>
+                                                        <td class="text-wrap">demo.evershop.io</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept-Encoding</td>
+                                                        <td class="text-wrap">gzip, deflate, br</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Connection</td>
+                                                        <td class="text-wrap">keep-alive</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Content-Length</td>
+                                                        <td class="text-wrap">50</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Request Body</h5>
+                                        <div class="dyn-height">
+                                            <pre><code id="copyReqText-2" class="prettyPrint">{
+            &quot;sku&quot;: &quot;NJC44141-Purple-L&quot;,
+            &quot;qty&quot;: &quot;1&quot;
+        }</code></pre>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button class="btn btn-outline-secondary btn-sm copyButton" type="button" data-clipboard-action="copy" data-clipboard-target="#copyReqText-2">Copy to Clipboard</button>
+                                        </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Headers</h5>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                        <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="text-nowrap">Content-Length</td>
+                                                    <td class="text-wrap">1096</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Content-Type</td>
+                                                    <td class="text-wrap">application/json; charset&#x3D;utf-8</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Date</td>
+                                                    <td class="text-wrap">Thu, 13 Feb 2025 15:33:40 GMT</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">ETag</td>
+                                                    <td class="text-wrap">W/&quot;448-9CaIzpCQWfrWP89KccVH9azHDB4&quot;</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">request-context</td>
+                                                    <td class="text-wrap">appId&#x3D;cid-v1:</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">X-Powered-By</td>
+                                                    <td class="text-wrap">Express</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Body</h5>
+                                        <div class="dyn-height">
+                                                <pre><code id="copyText-a9d6dd6c-5f39-4066-937d-81ec21d10743" class="prettyPrint">{&quot;data&quot;:{&quot;item&quot;:{&quot;uuid&quot;:&quot;0650f849-273e-4462-a6ec-01c10d6247a7&quot;,&quot;product_id&quot;:171,&quot;productUrl&quot;:&quot;/nike-react-infinity-run-flyknit-171&quot;,&quot;product_uuid&quot;:&quot;ed6ddd29-f245-4088-8255-de4804fb04a5&quot;,&quot;product_sku&quot;:&quot;NJC44141-Purple-L&quot;,&quot;group_id&quot;:1,&quot;category_id&quot;:null,&quot;product_name&quot;:&quot;Nike react infinity run flyknit&quot;,&quot;thumbnail&quot;:&quot;https://demositefiles.blob.core.windows.net/images/catalog/9381/3866/plv3878-Purple-thumb.png&quot;,&quot;product_weight&quot;:9.4,&quot;tax_class_id&quot;:1,&quot;qty&quot;:1,&quot;variant_group_id&quot;:100,&quot;variant_options&quot;:&quot;[{\&quot;attribute_code\&quot;:\&quot;size\&quot;,\&quot;attribute_name\&quot;:\&quot;Size\&quot;,\&quot;attribute_id\&quot;:2,\&quot;option_id\&quot;:6,\&quot;option_text\&quot;:\&quot;L\&quot;},{\&quot;attribute_code\&quot;:\&quot;color\&quot;,\&quot;attribute_name\&quot;:\&quot;Color\&quot;,\&quot;attribute_id\&quot;:3,\&quot;option_id\&quot;:27,\&quot;option_text\&quot;:\&quot;Purple\&quot;}]&quot;,&quot;tax_percent&quot;:0,&quot;product_price&quot;:543,&quot;product_price_incl_tax&quot;:543,&quot;tax_amount_before_discount&quot;:0,&quot;final_price&quot;:543,&quot;final_price_incl_tax&quot;:543,&quot;line_total&quot;:543,&quot;line_total_incl_tax&quot;:543,&quot;discount_amount&quot;:0,&quot;tax_amount&quot;:0,&quot;line_total_with_discount&quot;:543,&quot;line_total_with_discount_incl_tax&quot;:543,&quot;errors&quot;:{}},&quot;count&quot;:1,&quot;cartId&quot;:&quot;deb5680700554f359929785976b64589&quot;}}</code></pre>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button class="btn btn-outline-secondary btn-sm copyButton" type="button" data-clipboard-action="copy" data-clipboard-target="#copyText-a9d6dd6c-5f39-4066-937d-81ec21d10743">Copy to Clipboard</button>
+                                        </div>
+                                </div>
+                            </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="card border-info">
+                                <div class="card-body">
+                                <h5 class="card-title text-uppercase text-white text-center bg-info">Test Information</h5>
+                                    <div class="table-responsive text-nowrap">
+                                        <table class="datatable table table-hover">
+                                        <thead><tr class="text-center"><th>Name</th><th>Passed</th><th>Failed</th><th>Skipped</th></tr></thead>
+                                            <tbody>
+                                                <tr >
+                                                    <td >Verify the response status code is 200</td>
+                                                    <td class="text-center bg-success">1</td>
+                                                    <td class="text-center ">0</td>
+                                                    <td class="text-center ">0</td>
+                                                </tr>
+                                                <tr >
+                                                    <td >Verify product SKU</td>
+                                                    <td class="text-center bg-success">1</td>
+                                                    <td class="text-center ">0</td>
+                                                    <td class="text-center ">0</td>
+                                                </tr>
+                                                <tr >
+                                                    <td >Verify product quantity</td>
+                                                    <td class="text-center bg-success">1</td>
+                                                    <td class="text-center ">0</td>
+                                                    <td class="text-center ">0</td>
+                                                </tr>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr class="bg-light">
+                                                    <td><strong>Total</strong></td>
+                                                    <td class="text-center">3</td>
+                                                    <td class="text-center">0</td>
+                                                    <td class="text-center">0</td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                    <div class="row d-none">
+                                    <div class="col-sm-12 mb-3">
+                                        <div class="card-deck">
+                                        <div class="card border-danger" style="width: 50rem;">
+                                            <div class="card-body">
+                                                <h5 class="card-title text-uppercase text-white text-center bg-danger">Test Failure</h5>
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover">
+                                                    <thead><tr class="text-nowrap"><th>Test Name</th><th>Assertion Error</th></tr></thead>
+                                                        <tbody>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+            <div id="folder-b9f1f47b-eb6a-4424-9916-f102ff801fb3" class="card-deck iteration-0">
+            <div class="row iteration-0">
+                <div class="col-sm-12 mb-3 iteration-0">
+                <div class="card iteration-0">
+                    <div class="card-header  bg-success iteration-0">
+                        <a data-toggle="collapse" href="#" data-target="#collapse-b9f1f47b-eb6a-4424-9916-f102ff801fb3" aria-expanded="false" aria-controls="collapse" id="requests-b9f1f47b-eb6a-4424-9916-f102ff801fb3" class="collapsed text-white z-block">
+                    Iteration: 1 - post_viewCart <i class="float-lg-right fa fa-chevron-down" style="padding-top: 5px;"></i>
+                </a>
+                    </div>
+                    <div id="collapse-b9f1f47b-eb6a-4424-9916-f102ff801fb3" class="collapse" aria-labelledby="requests-b9f1f47b-eb6a-4424-9916-f102ff801fb3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Request Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request Method:</strong> <span class="badge-outline-success badge badge-success"> GET</span><br>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request URL:</strong> <a href="https://demo.evershop.io/cart?ajax&#x3D;true" target="_blank">https://demo.evershop.io/cart?ajax&#x3D;true</a><br>
+                                    </div>
+                                </div>
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Response Code:</strong> <span class="float-right badge-outline badge badge-success"> 200 - OK</span><br>
+                                    <span><i class="fas fa-stopwatch"></i></span><strong> Mean time per request:</strong> <span class="float-right badge-outline badge badge-success"> 356ms</span><br>
+                                    <span><i class="fas fa-database"></i></span><strong> Mean size per request:</strong> <span class="float-right badge-outline badge badge-success"> 4.66KB</span><br>
+                                    <hr>
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Test Pass Percentage</h5>
+                                    <div>
+                                        <div class="progress" style="height: 40px;">
+                                            <div class="progress-bar  bg-success" style="width: 100%" role="progressbar">
+                                            <h5 style="padding-top:5px;"><strong>100 %</strong></h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-uppercase text-white text-center bg-info">Request Headers</h5>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                            <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="text-nowrap">Cookie</td>
+                                                        <td class="text-wrap">sid&#x3D;s%3AegM_H9gwwAemvfqn1Mfjp45E5d9qoYxk.e6evGPv3gDRre5eOOhAR%2F3uwMuaepWvtapdtvO%2BO26k</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">User-Agent</td>
+                                                        <td class="text-wrap">PostmanRuntime/7.39.1</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept</td>
+                                                        <td class="text-wrap">*/*</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Cache-Control</td>
+                                                        <td class="text-wrap">no-cache</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Postman-Token</td>
+                                                        <td class="text-wrap">159dca88-70d6-4d7d-940f-501f96f5e065</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Host</td>
+                                                        <td class="text-wrap">demo.evershop.io</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept-Encoding</td>
+                                                        <td class="text-wrap">gzip, deflate, br</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Connection</td>
+                                                        <td class="text-wrap">keep-alive</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Headers</h5>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                        <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="text-nowrap">Content-Length</td>
+                                                    <td class="text-wrap">4775</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Content-Type</td>
+                                                    <td class="text-wrap">application/json; charset&#x3D;utf-8</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Date</td>
+                                                    <td class="text-wrap">Thu, 13 Feb 2025 15:33:40 GMT</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">ETag</td>
+                                                    <td class="text-wrap">W/&quot;12a7-tTo0+RA8szgpAp9Orm+vsnoMzfA&quot;</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">request-context</td>
+                                                    <td class="text-wrap">appId&#x3D;cid-v1:</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">X-Powered-By</td>
+                                                    <td class="text-wrap">Express</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Body</h5>
+                                        <div class="dyn-height">
+                                                <pre><code id="copyText-bb77c03d-1c87-4658-96bf-6aa6370dc811" class="prettyPrint">{&quot;success&quot;:true,&quot;eContext&quot;:{&quot;graphqlResponse&quot;:{&quot;e248uix4m5ibqb7v&quot;:&quot;https://demo.evershop.io/search&quot;,&quot;e248uix4m5ibqb7w&quot;:&quot;https://demo.evershop.io/cart&quot;,&quot;e248uix4m5ibqb7x&quot;:{&quot;totalQty&quot;:1},&quot;e248uix4m5ibqb7y&quot;:{&quot;totalQty&quot;:1,&quot;uuid&quot;:&quot;deb56807-0055-4f35-9929-785976b64589&quot;,&quot;items&quot;:[{&quot;cartItemId&quot;:&quot;82642&quot;,&quot;thumbnail&quot;:&quot;https://demositefiles.blob.core.windows.net/images/catalog/9381/3866/plv3878-Purple-thumb.png&quot;,&quot;qty&quot;:1,&quot;productName&quot;:&quot;Nike react infinity run flyknit&quot;,&quot;productSku&quot;:&quot;NJC44141-Purple-L&quot;,&quot;variantOptions&quot;:&quot;[{\&quot;attribute_code\&quot;:\&quot;size\&quot;,\&quot;attribute_name\&quot;:\&quot;Size\&quot;,\&quot;attribute_id\&quot;:2,\&quot;option_id\&quot;:6,\&quot;option_text\&quot;:\&quot;L\&quot;},{\&quot;attribute_code\&quot;:\&quot;color\&quot;,\&quot;attribute_name\&quot;:\&quot;Color\&quot;,\&quot;attribute_id\&quot;:3,\&quot;option_id\&quot;:27,\&quot;option_text\&quot;:\&quot;Purple\&quot;}]&quot;,&quot;productUrl&quot;:&quot;/nike-react-infinity-run-flyknit-171&quot;,&quot;productPrice&quot;:{&quot;value&quot;:543,&quot;text&quot;:&quot;$543.00&quot;},&quot;productPriceInclTax&quot;:{&quot;value&quot;:543,&quot;text&quot;:&quot;$543.00&quot;},&quot;finalPrice&quot;:{&quot;value&quot;:543,&quot;text&quot;:&quot;$543.00&quot;},&quot;finalPriceInclTax&quot;:{&quot;value&quot;:543,&quot;text&quot;:&quot;$543.00&quot;},&quot;lineTotal&quot;:{&quot;value&quot;:543,&quot;text&quot;:&quot;$543.00&quot;},&quot;lineTotalInclTax&quot;:{&quot;value&quot;:543,&quot;text&quot;:&quot;$543.00&quot;},&quot;removeApi&quot;:&quot;/api/cart/deb56807-0055-4f35-9929-785976b64589/items/0650f849-273e-4462-a6ec-01c10d6247a7&quot;,&quot;updateQtyApi&quot;:&quot;/api/cart/deb56807-0055-4f35-9929-785976b64589/items/0650f849-273e-4462-a6ec-01c10d6247a7&quot;,&quot;errors&quot;:[]}]},&quot;e248uix4m5ibqb7z&quot;:{&quot;priceIncludingTax&quot;:true},&quot;e248uix4m5ibqb80&quot;:{&quot;totalQty&quot;:1,&quot;subTotal&quot;:{&quot;value&quot;:543,&quot;text&quot;:&quot;$543.00&quot;},&quot;subTotalInclTax&quot;:{&quot;value&quot;:543,&quot;text&quot;:&quot;$543.00&quot;},&quot;grandTotal&quot;:{&quot;value&quot;:543,&quot;text&quot;:&quot;$543.00&quot;},&quot;totalTaxAmount&quot;:{&quot;value&quot;:0,&quot;text&quot;:&quot;$0.00&quot;},&quot;discountAmount&quot;:{&quot;value&quot;:0,&quot;text&quot;:&quot;$0.00&quot;},&quot;coupon&quot;:null},&quot;e248uix4m5ibqb81&quot;:{&quot;priceIncludingTax&quot;:true},&quot;e248uix4m5ibqb82&quot;:&quot;https://demo.evershop.io/checkout&quot;,&quot;e248uix4m5ibqb83&quot;:{&quot;breadcrumbs&quot;:[{&quot;title&quot;:&quot;Home&quot;,&quot;url&quot;:&quot;/&quot;},{&quot;title&quot;:&quot;Shopping cart&quot;,&quot;url&quot;:&quot;https://demo.evershop.io/cart?ajax&#x3D;true&quot;}]},&quot;e248uix4m5ibqb84&quot;:{&quot;copyRight&quot;:&quot;© 2022 Evershop. All Rights Reserved.&quot;},&quot;e248uix4m5ibqb85&quot;:{&quot;title&quot;:&quot;Shopping cart&quot;,&quot;description&quot;:&quot;Shopping cart&quot;},&quot;e248uix4m5ibqb86&quot;:{&quot;headTags&quot;:{&quot;metas&quot;:[{&quot;name&quot;:&quot;robots&quot;,&quot;content&quot;:&quot;noindex&quot;,&quot;charSet&quot;:null,&quot;httpEquiv&quot;:null,&quot;property&quot;:null,&quot;itemProp&quot;:null,&quot;itemType&quot;:null,&quot;itemID&quot;:null,&quot;lang&quot;:null}],&quot;links&quot;:[],&quot;scripts&quot;:[],&quot;base&quot;:null}},&quot;e248uix4m5ibqb87&quot;:{&quot;logo&quot;:{&quot;src&quot;:null,&quot;alt&quot;:null,&quot;width&quot;:null,&quot;height&quot;:null}},&quot;e248uix4m5ibqb88&quot;:null,&quot;e248uix4m5ibqb89&quot;:&quot;https://demo.evershop.io/account&quot;,&quot;e248uix4m5ibqb8a&quot;:&quot;https://demo.evershop.io/account/login&quot;,&quot;e248uix4m5ibqb8b&quot;:{&quot;applyCouponApi&quot;:&quot;/api/carts/deb56807-0055-4f35-9929-785976b64589/coupons&quot;},&quot;e8kjds2qm73i2731&quot;:{&quot;menus&quot;:[{&quot;id&quot;:&quot;8kjds2qm73i2737&quot;,&quot;name&quot;:&quot;Shop ❤️&quot;,&quot;url&quot;:&quot;javascript:void(0)&quot;,&quot;type&quot;:&quot;custom&quot;,&quot;uuid&quot;:&quot;javascript:void(0)&quot;,&quot;children&quot;:[{&quot;name&quot;:&quot;Men&quot;,&quot;url&quot;:&quot;/men&quot;,&quot;type&quot;:&quot;custom&quot;,&quot;uuid&quot;:&quot;/men&quot;},{&quot;name&quot;:&quot;Women&quot;,&quot;url&quot;:&quot;/women&quot;,&quot;type&quot;:&quot;custom&quot;,&quot;uuid&quot;:&quot;/women&quot;}]},{&quot;id&quot;:&quot;8kjds2qm73i273a&quot;,&quot;name&quot;:&quot;About us&quot;,&quot;url&quot;:&quot;/page/about-us&quot;,&quot;type&quot;:&quot;custom&quot;,&quot;uuid&quot;:&quot;/page/about-us&quot;,&quot;children&quot;:[]}],&quot;isMain&quot;:true,&quot;className&quot;:&quot;&quot;}},&quot;propsMap&quot;:{&quot;137dcfd8bf7950dd6201684efdcb40a1&quot;:[{&quot;origin&quot;:&quot;searchPageUrl&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqb7v&quot;}],&quot;5248a628c0ba0eb2edc726fbc70778f8&quot;:[{&quot;origin&quot;:&quot;cartUrl&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqb7w&quot;},{&quot;origin&quot;:&quot;cart&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqb7x&quot;}],&quot;87b5a6343580ffba5d3cd5dcf3da9b15&quot;:[{&quot;origin&quot;:&quot;cart&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqb7y&quot;},{&quot;origin&quot;:&quot;setting&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqb7z&quot;}],&quot;0970d39aae36909e09c0cbec65369c02&quot;:[{&quot;origin&quot;:&quot;cart&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqb80&quot;},{&quot;origin&quot;:&quot;setting&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqb81&quot;},{&quot;origin&quot;:&quot;checkoutUrl&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqb82&quot;}],&quot;45515ab09f9ce8f561fc40ca4ffb7b2f&quot;:[{&quot;origin&quot;:&quot;pageInfo&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqb83&quot;}],&quot;03ce62a99b643c53cea33f6fc2c573f5&quot;:[{&quot;origin&quot;:&quot;themeConfig&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqb84&quot;}],&quot;170528765f0295e4db900fd92ea387bc&quot;:[{&quot;origin&quot;:&quot;pageInfo&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqb85&quot;},{&quot;origin&quot;:&quot;themeConfig&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqb86&quot;}],&quot;2aa0bf53e05360bd37f2dd0982998263&quot;:[],&quot;a20b83833c6ae10ded5077b0943cfef5&quot;:[{&quot;origin&quot;:&quot;themeConfig&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqb87&quot;}],&quot;18bf66723f1e3394e1ebb5dce01e8097&quot;:[],&quot;fef4b1d9ae2122930f9c33edbb982d6e&quot;:[{&quot;origin&quot;:&quot;customer&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqb88&quot;},{&quot;origin&quot;:&quot;accountUrl&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqb89&quot;},{&quot;origin&quot;:&quot;loginUrl&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqb8a&quot;}],&quot;8bdf6e07d5f321c363037c0ecd754c6d&quot;:[{&quot;origin&quot;:&quot;cart&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqb8b&quot;}],&quot;b9b0aede0abb0546fe77c67089bdd6f5&quot;:[{&quot;origin&quot;:&quot;collection&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqb8c&quot;}],&quot;78d4735155d485f34d387c8394613fb7&quot;:[{&quot;origin&quot;:&quot;textWidget&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqb8g&quot;}],&quot;d71e8a0220472a4a5360ae305aa98d5b&quot;:[{&quot;origin&quot;:&quot;basicMenuWidget&quot;,&quot;alias&quot;:&quot;e248uix4m5ibqb8k&quot;}],&quot;e9869af9cb99540caac4704f0a1d6de86&quot;:[{&quot;origin&quot;:&quot;basicMenuWidget&quot;,&quot;alias&quot;:&quot;e8kjds2qm73i2731&quot;}]},&quot;widgets&quot;:[{&quot;sortOrder&quot;:1,&quot;areaId&quot;:[&quot;header&quot;],&quot;type&quot;:&quot;basic_menu&quot;,&quot;id&quot;:&quot;e9869af9cb99540caac4704f0a1d6de86&quot;}],&quot;notifications&quot;:[]}}</code></pre>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button class="btn btn-outline-secondary btn-sm copyButton" type="button" data-clipboard-action="copy" data-clipboard-target="#copyText-bb77c03d-1c87-4658-96bf-6aa6370dc811">Copy to Clipboard</button>
+                                        </div>
+                                </div>
+                            </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="card border-info">
+                                <div class="card-body">
+                                <h5 class="card-title text-uppercase text-white text-center bg-info">Test Information</h5>
+                                    <div class="table-responsive text-nowrap">
+                                        <table class="datatable table table-hover">
+                                        <thead><tr class="text-center"><th>Name</th><th>Passed</th><th>Failed</th><th>Skipped</th></tr></thead>
+                                            <tbody>
+                                                <tr >
+                                                    <td >Verify the response status code is 200</td>
+                                                    <td class="text-center bg-success">1</td>
+                                                    <td class="text-center ">0</td>
+                                                    <td class="text-center ">0</td>
+                                                </tr>
+                                                <tr >
+                                                    <td >Verify cart&#x27;s totalQty quantity</td>
+                                                    <td class="text-center bg-success">1</td>
+                                                    <td class="text-center ">0</td>
+                                                    <td class="text-center ">0</td>
+                                                </tr>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr class="bg-light">
+                                                    <td><strong>Total</strong></td>
+                                                    <td class="text-center">2</td>
+                                                    <td class="text-center">0</td>
+                                                    <td class="text-center">0</td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                    <div class="row d-none">
+                                    <div class="col-sm-12 mb-3">
+                                        <div class="card-deck">
+                                        <div class="card border-danger" style="width: 50rem;">
+                                            <div class="card-body">
+                                                <h5 class="card-title text-uppercase text-white text-center bg-danger">Test Failure</h5>
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover">
+                                                    <thead><tr class="text-nowrap"><th>Test Name</th><th>Assertion Error</th></tr></thead>
+                                                        <tbody>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+            <div id="folder-b44fb66a-36cf-4e49-bd58-15d286e3b19a" class="card-deck iteration-0">
+            <div class="row iteration-0">
+                <div class="col-sm-12 mb-3 iteration-0">
+                <div class="card iteration-0">
+                    <div class="card-header  bg-success iteration-0">
+                        <a data-toggle="collapse" href="#" data-target="#collapse-b44fb66a-36cf-4e49-bd58-15d286e3b19a" aria-expanded="false" aria-controls="collapse" id="requests-b44fb66a-36cf-4e49-bd58-15d286e3b19a" class="collapsed text-white z-block">
+                    Iteration: 1 - removeFromCart <i class="float-lg-right fa fa-chevron-down" style="padding-top: 5px;"></i>
+                </a>
+                    </div>
+                    <div id="collapse-b44fb66a-36cf-4e49-bd58-15d286e3b19a" class="collapse" aria-labelledby="requests-b44fb66a-36cf-4e49-bd58-15d286e3b19a">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Request Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request Method:</strong> <span class="badge-outline-success badge badge-success"> DELETE</span><br>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request URL:</strong> <a href="https://demo.evershop.io/api/cart/deb56807-0055-4f35-9929-785976b64589/items/0650f849-273e-4462-a6ec-01c10d6247a7" target="_blank">https://demo.evershop.io/api/cart/deb56807-0055-4f35-9929-785976b64589/items/0650f849-273e-4462-a6ec-01c10d6247a7</a><br>
+                                    </div>
+                                </div>
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Response Code:</strong> <span class="float-right badge-outline badge badge-success"> 200 - OK</span><br>
+                                    <span><i class="fas fa-stopwatch"></i></span><strong> Mean time per request:</strong> <span class="float-right badge-outline badge badge-success"> 211ms</span><br>
+                                    <span><i class="fas fa-database"></i></span><strong> Mean size per request:</strong> <span class="float-right badge-outline badge badge-success"> 1.12KB</span><br>
+                                    <hr>
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Test Pass Percentage</h5>
+                                    <div>
+                                        <div class="progress" style="height: 40px;">
+                                            <div class="progress-bar bg-success" style="width: 100%" role="progressbar">
+                                            <h5 class="text-uppercase text-white text-center" style="padding-top:5px;"><strong>No Tests for this request</strong></h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-uppercase text-white text-center bg-info">Request Headers</h5>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                            <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="text-nowrap">User-Agent</td>
+                                                        <td class="text-wrap">PostmanRuntime/7.39.1</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept</td>
+                                                        <td class="text-wrap">*/*</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Cache-Control</td>
+                                                        <td class="text-wrap">no-cache</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Postman-Token</td>
+                                                        <td class="text-wrap">5868c2ce-bb6b-49a2-922d-4a0156f23ed2</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Host</td>
+                                                        <td class="text-wrap">demo.evershop.io</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept-Encoding</td>
+                                                        <td class="text-wrap">gzip, deflate, br</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Connection</td>
+                                                        <td class="text-wrap">keep-alive</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Cookie</td>
+                                                        <td class="text-wrap">sid&#x3D;s%3AegM_H9gwwAemvfqn1Mfjp45E5d9qoYxk.e6evGPv3gDRre5eOOhAR%2F3uwMuaepWvtapdtvO%2BO26k</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Headers</h5>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                        <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="text-nowrap">Content-Length</td>
+                                                    <td class="text-wrap">1151</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Content-Type</td>
+                                                    <td class="text-wrap">application/json; charset&#x3D;utf-8</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Date</td>
+                                                    <td class="text-wrap">Thu, 13 Feb 2025 15:33:40 GMT</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">ETag</td>
+                                                    <td class="text-wrap">W/&quot;47f-R4wqUFEKQK8xOupu3ogUm35aIYo&quot;</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">request-context</td>
+                                                    <td class="text-wrap">appId&#x3D;cid-v1:</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">X-Powered-By</td>
+                                                    <td class="text-wrap">Express</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Body</h5>
+                                        <div class="dyn-height">
+                                                <pre><code id="copyText-c6fa28c4-d697-4b7d-83dc-a9c903c7853b" class="prettyPrint">{&quot;data&quot;:{&quot;item&quot;:{&quot;cart_item_id&quot;:82642,&quot;uuid&quot;:&quot;0650f849-273e-4462-a6ec-01c10d6247a7&quot;,&quot;cart_id&quot;:69822,&quot;product_id&quot;:171,&quot;productUrl&quot;:&quot;/nike-react-infinity-run-flyknit-171&quot;,&quot;product_uuid&quot;:&quot;ed6ddd29-f245-4088-8255-de4804fb04a5&quot;,&quot;product_sku&quot;:&quot;NJC44141-Purple-L&quot;,&quot;group_id&quot;:1,&quot;category_id&quot;:null,&quot;product_name&quot;:&quot;Nike react infinity run flyknit&quot;,&quot;thumbnail&quot;:&quot;https://demositefiles.blob.core.windows.net/images/catalog/9381/3866/plv3878-Purple-thumb.png&quot;,&quot;product_weight&quot;:9.4,&quot;tax_class_id&quot;:1,&quot;qty&quot;:1,&quot;variant_group_id&quot;:100,&quot;variant_options&quot;:&quot;[{\&quot;attribute_code\&quot;:\&quot;size\&quot;,\&quot;attribute_name\&quot;:\&quot;Size\&quot;,\&quot;attribute_id\&quot;:2,\&quot;option_id\&quot;:6,\&quot;option_text\&quot;:\&quot;L\&quot;},{\&quot;attribute_code\&quot;:\&quot;color\&quot;,\&quot;attribute_name\&quot;:\&quot;Color\&quot;,\&quot;attribute_id\&quot;:3,\&quot;option_id\&quot;:27,\&quot;option_text\&quot;:\&quot;Purple\&quot;}]&quot;,&quot;removeUrl&quot;:&quot;/api/cart/mine/items/0650f849-273e-4462-a6ec-01c10d6247a7&quot;,&quot;tax_percent&quot;:0,&quot;product_price&quot;:543,&quot;product_price_incl_tax&quot;:543,&quot;tax_amount_before_discount&quot;:0,&quot;final_price&quot;:543,&quot;final_price_incl_tax&quot;:543,&quot;line_total&quot;:543,&quot;line_total_incl_tax&quot;:543,&quot;discount_amount&quot;:0,&quot;tax_amount&quot;:0,&quot;line_total_with_discount&quot;:543,&quot;line_total_with_discount_incl_tax&quot;:543,&quot;errors&quot;:{}}}}</code></pre>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button class="btn btn-outline-secondary btn-sm copyButton" type="button" data-clipboard-action="copy" data-clipboard-target="#copyText-c6fa28c4-d697-4b7d-83dc-a9c903c7853b">Copy to Clipboard</button>
+                                        </div>
+                                </div>
+                            </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="card border-info">
+                                <div class="card-body">
+                                <h5 class="card-title text-uppercase text-white text-center bg-info">Test Information</h5>
+                                    <h5 class="alert alert-success text-uppercase text-center">No Tests for this request</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.2.1/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/remarkable/1.7.1/remarkable.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<!-- Set slider initial position depending on the localstorage state -->
+
+<script>
+(function () {
+  var sliderChecked = true;
+  if (localStorage.getItem('theme') === 'theme-light') {
+    setTheme('theme-light');
+    sliderChecked = false;
+  } else {
+    setTheme('theme-dark');
+    sliderChecked = true;
+  }
+  $(document).ready( function () {
+    document.getElementById('slider').checked = sliderChecked;
+  });
+})();
+</script>
+
+<!-- Data Table Configuration -->
+
+<script>
+$(document).ready( function () {
+    $('.datatable').DataTable({
+        "retrieve": true,
+        "paging": false,
+        "info": false,
+        "fixedColumns":   {
+            "heightMatch": 'none'
+        }
+    });
+});
+</script>
+
+<!-- Tooltip Configuration -->
+
+<script>
+$(document).ready(function() {
+    $('[data-toggle="tooltip"]').tooltip({
+        trigger : 'hover'
+    })
+})
+</script>
+
+<!-- Show/Hide The Folders -->
+
+<script>
+$('#openAll').on('click', function(e) {
+let clickCount = $(this).data("clickCount") || 1
+switch (clickCount){
+    case 1:
+            $('#folder-578a645f-4417-47a9-b2d8-7de849d099ee-iteration-0').removeClass('collapsed')
+            $('#folder-collapse-578a645f-4417-47a9-b2d8-7de849d099ee-iteration-0').addClass('show')
+        $('#openAll').html("Collapse Folders");
+        break;
+    case 2:
+            $('#folder-578a645f-4417-47a9-b2d8-7de849d099ee-iteration-0').addClass('collapsed')
+            $('#folder-collapse-578a645f-4417-47a9-b2d8-7de849d099ee-iteration-0').removeClass('show')
+        $('#openAll').html("Expand Folders");
+        break;
+}
+clickCount = clickCount > 1 ? 1 : ++clickCount;
+$(this).data("clickCount", clickCount)
+})
+</script>
+
+<!-- Show/Hide The Requests -->
+
+<script>
+$('#openAllRequests').on('click', function(e) {
+let clickCount = $(this).data("clickCount") || 1
+switch (clickCount){
+    case 1:
+            $('#requests-e53a2077-856c-4172-b90b-150ae4d08c7b').removeClass('collapsed')
+            $('#collapse-e53a2077-856c-4172-b90b-150ae4d08c7b').removeClass('collapsed')
+            $('#requests-e53a2077-856c-4172-b90b-150ae4d08c7b').addClass('show')
+            $('#collapse-e53a2077-856c-4172-b90b-150ae4d08c7b').addClass('show')
+            $('#requests-80adeaaf-2bf4-4ba4-8a0b-c8868e8005d7').removeClass('collapsed')
+            $('#collapse-80adeaaf-2bf4-4ba4-8a0b-c8868e8005d7').removeClass('collapsed')
+            $('#requests-80adeaaf-2bf4-4ba4-8a0b-c8868e8005d7').addClass('show')
+            $('#collapse-80adeaaf-2bf4-4ba4-8a0b-c8868e8005d7').addClass('show')
+            $('#requests-8303cdc9-ca66-442e-a7fe-6269fcf292c9').removeClass('collapsed')
+            $('#collapse-8303cdc9-ca66-442e-a7fe-6269fcf292c9').removeClass('collapsed')
+            $('#requests-8303cdc9-ca66-442e-a7fe-6269fcf292c9').addClass('show')
+            $('#collapse-8303cdc9-ca66-442e-a7fe-6269fcf292c9').addClass('show')
+            $('#requests-b9f1f47b-eb6a-4424-9916-f102ff801fb3').removeClass('collapsed')
+            $('#collapse-b9f1f47b-eb6a-4424-9916-f102ff801fb3').removeClass('collapsed')
+            $('#requests-b9f1f47b-eb6a-4424-9916-f102ff801fb3').addClass('show')
+            $('#collapse-b9f1f47b-eb6a-4424-9916-f102ff801fb3').addClass('show')
+            $('#requests-b44fb66a-36cf-4e49-bd58-15d286e3b19a').removeClass('collapsed')
+            $('#collapse-b44fb66a-36cf-4e49-bd58-15d286e3b19a').removeClass('collapsed')
+            $('#requests-b44fb66a-36cf-4e49-bd58-15d286e3b19a').addClass('show')
+            $('#collapse-b44fb66a-36cf-4e49-bd58-15d286e3b19a').addClass('show')
+        $('#openAllRequests').html("Collapse Requests");
+        break;
+    case 2:
+            $('#requests-e53a2077-856c-4172-b90b-150ae4d08c7b').addClass('collapsed')
+            $('#collapse-e53a2077-856c-4172-b90b-150ae4d08c7b').addClass('collapsed')
+            $('#requests-e53a2077-856c-4172-b90b-150ae4d08c7b').removeClass('show')
+            $('#collapse-e53a2077-856c-4172-b90b-150ae4d08c7b').removeClass('show')
+            $('#requests-80adeaaf-2bf4-4ba4-8a0b-c8868e8005d7').addClass('collapsed')
+            $('#collapse-80adeaaf-2bf4-4ba4-8a0b-c8868e8005d7').addClass('collapsed')
+            $('#requests-80adeaaf-2bf4-4ba4-8a0b-c8868e8005d7').removeClass('show')
+            $('#collapse-80adeaaf-2bf4-4ba4-8a0b-c8868e8005d7').removeClass('show')
+            $('#requests-8303cdc9-ca66-442e-a7fe-6269fcf292c9').addClass('collapsed')
+            $('#collapse-8303cdc9-ca66-442e-a7fe-6269fcf292c9').addClass('collapsed')
+            $('#requests-8303cdc9-ca66-442e-a7fe-6269fcf292c9').removeClass('show')
+            $('#collapse-8303cdc9-ca66-442e-a7fe-6269fcf292c9').removeClass('show')
+            $('#requests-b9f1f47b-eb6a-4424-9916-f102ff801fb3').addClass('collapsed')
+            $('#collapse-b9f1f47b-eb6a-4424-9916-f102ff801fb3').addClass('collapsed')
+            $('#requests-b9f1f47b-eb6a-4424-9916-f102ff801fb3').removeClass('show')
+            $('#collapse-b9f1f47b-eb6a-4424-9916-f102ff801fb3').removeClass('show')
+            $('#requests-b44fb66a-36cf-4e49-bd58-15d286e3b19a').addClass('collapsed')
+            $('#collapse-b44fb66a-36cf-4e49-bd58-15d286e3b19a').addClass('collapsed')
+            $('#requests-b44fb66a-36cf-4e49-bd58-15d286e3b19a').removeClass('show')
+            $('#collapse-b44fb66a-36cf-4e49-bd58-15d286e3b19a').removeClass('show')
+        $('#openAllRequests').html("Expand Requests");
+        break;
+}
+clickCount = clickCount > 1 ? 1 : ++clickCount;
+$(this).data("clickCount", clickCount)
+})
+</script>
+
+<!-- Show/Hide The Skipped Tests -->
+
+<script>
+$('#openAllSkipped').on('click', function(e) {
+let clickCount = $(this).data("clickCount") || 1
+switch (clickCount){
+    case 1:
+            $('#skipped-e53a2077-856c-4172-b90b-150ae4d08c7b').removeClass('collapsed')
+            $('#skipped-collapse-e53a2077-856c-4172-b90b-150ae4d08c7b').removeClass('collapsed')
+            $('#skipped-e53a2077-856c-4172-b90b-150ae4d08c7b').addClass('show')
+            $('#skipped-collapse-e53a2077-856c-4172-b90b-150ae4d08c7b').addClass('show')
+            $('#skipped-80adeaaf-2bf4-4ba4-8a0b-c8868e8005d7').removeClass('collapsed')
+            $('#skipped-collapse-80adeaaf-2bf4-4ba4-8a0b-c8868e8005d7').removeClass('collapsed')
+            $('#skipped-80adeaaf-2bf4-4ba4-8a0b-c8868e8005d7').addClass('show')
+            $('#skipped-collapse-80adeaaf-2bf4-4ba4-8a0b-c8868e8005d7').addClass('show')
+            $('#skipped-8303cdc9-ca66-442e-a7fe-6269fcf292c9').removeClass('collapsed')
+            $('#skipped-collapse-8303cdc9-ca66-442e-a7fe-6269fcf292c9').removeClass('collapsed')
+            $('#skipped-8303cdc9-ca66-442e-a7fe-6269fcf292c9').addClass('show')
+            $('#skipped-collapse-8303cdc9-ca66-442e-a7fe-6269fcf292c9').addClass('show')
+            $('#skipped-b9f1f47b-eb6a-4424-9916-f102ff801fb3').removeClass('collapsed')
+            $('#skipped-collapse-b9f1f47b-eb6a-4424-9916-f102ff801fb3').removeClass('collapsed')
+            $('#skipped-b9f1f47b-eb6a-4424-9916-f102ff801fb3').addClass('show')
+            $('#skipped-collapse-b9f1f47b-eb6a-4424-9916-f102ff801fb3').addClass('show')
+            $('#skipped-b44fb66a-36cf-4e49-bd58-15d286e3b19a').removeClass('collapsed')
+            $('#skipped-collapse-b44fb66a-36cf-4e49-bd58-15d286e3b19a').removeClass('collapsed')
+            $('#skipped-b44fb66a-36cf-4e49-bd58-15d286e3b19a').addClass('show')
+            $('#skipped-collapse-b44fb66a-36cf-4e49-bd58-15d286e3b19a').addClass('show')
+        $('#openAllSkipped').html("Collapse All Skipped Tests");
+        break;
+    case 2:
+            $('#skipped-e53a2077-856c-4172-b90b-150ae4d08c7b').addClass('collapsed')
+            $('#skipped-collapse-e53a2077-856c-4172-b90b-150ae4d08c7b').addClass('collapsed')
+            $('#skipped-e53a2077-856c-4172-b90b-150ae4d08c7b').removeClass('show')
+            $('#skipped-collapse-e53a2077-856c-4172-b90b-150ae4d08c7b').removeClass('show')
+            $('#skipped-80adeaaf-2bf4-4ba4-8a0b-c8868e8005d7').addClass('collapsed')
+            $('#skipped-collapse-80adeaaf-2bf4-4ba4-8a0b-c8868e8005d7').addClass('collapsed')
+            $('#skipped-80adeaaf-2bf4-4ba4-8a0b-c8868e8005d7').removeClass('show')
+            $('#skipped-collapse-80adeaaf-2bf4-4ba4-8a0b-c8868e8005d7').removeClass('show')
+            $('#skipped-8303cdc9-ca66-442e-a7fe-6269fcf292c9').addClass('collapsed')
+            $('#skipped-collapse-8303cdc9-ca66-442e-a7fe-6269fcf292c9').addClass('collapsed')
+            $('#skipped-8303cdc9-ca66-442e-a7fe-6269fcf292c9').removeClass('show')
+            $('#skipped-collapse-8303cdc9-ca66-442e-a7fe-6269fcf292c9').removeClass('show')
+            $('#skipped-b9f1f47b-eb6a-4424-9916-f102ff801fb3').addClass('collapsed')
+            $('#skipped-collapse-b9f1f47b-eb6a-4424-9916-f102ff801fb3').addClass('collapsed')
+            $('#skipped-b9f1f47b-eb6a-4424-9916-f102ff801fb3').removeClass('show')
+            $('#skipped-collapse-b9f1f47b-eb6a-4424-9916-f102ff801fb3').removeClass('show')
+            $('#skipped-b44fb66a-36cf-4e49-bd58-15d286e3b19a').addClass('collapsed')
+            $('#skipped-collapse-b44fb66a-36cf-4e49-bd58-15d286e3b19a').addClass('collapsed')
+            $('#skipped-b44fb66a-36cf-4e49-bd58-15d286e3b19a').removeClass('show')
+            $('#skipped-collapse-b44fb66a-36cf-4e49-bd58-15d286e3b19a').removeClass('show')
+        $('#openAllSkipped').html("Expand All Skipped Tests");
+        break;
+}
+clickCount = clickCount > 1 ? 1 : ++clickCount;
+$(this).data("clickCount", clickCount)
+})
+</script>
+
+<!-- Show/Hide The Failures -->
+
+<script>
+$('#openAllFailed').on('click', function(e) {
+let clickCount = $(this).data("clickCount") || 1
+let failedItemContent
+let failedItemHeading
+switch (clickCount){
+    case 1:
+        $('#openAllFailed').html("Collapse All Failed Tests");
+        break;
+    case 2:
+        $('#openAllFailed').html("Expand All Failed Tests");
+        break;
+}
+clickCount = clickCount > 1 ? 1 : ++clickCount;
+$(this).data("clickCount", clickCount)
+})
+</script>
+
+<!-- Pretty Print the Response Body-->
+
+<script>
+function isJSON(data)
+{
+    var ret = true;
+    try {
+            JSON.parse(data);
+    }catch(e) {
+            ret = false;
+    }
+    return ret;
+}
+
+function isXML(data)
+{
+    return (data.length > 0 && data[0] === '<');
+}
+
+// see https://gist.github.com/sente/1083506/d2834134cd070dbcc08bf42ee27dabb746a1c54d#gistcomment-2254622
+function formatXML(data) {
+    const PADDING = ' '.repeat(2); // set desired indent size here
+    const reg = /(>)(<)(\/*)/g;
+    let pad = 0;
+    xml = data.replace(reg, '$1\r\n$2$3');
+
+    return xml.split('\r\n').map((node, index) => {
+        let indent = 0;
+        if (node.match(/.+<\/\w[^>]*>$/)) {
+            indent = 0;
+        } else if (node.match(/^<\/\w/) && pad > 0) {
+            pad -= 1;
+        } else if (node.match(/^<\w[^>]*[^\/]>.*$/)) {
+            indent = 1;
+        } else {
+            indent = 0;
+        }
+
+        pad += indent;
+        return PADDING.repeat(pad - indent) + node;
+    }).join('\r\n');
+}
+
+$(".prettyPrint").each(function () {
+        var data = $(this).text();
+        // Verify whether data is JSON
+        if(isJSON(data))
+        {
+                obj = JSON.parse(data);
+                data = JSON.stringify(obj, null, 2);
+        }
+        else if(isXML(data)) {
+            data = formatXML(data);
+        }
+        $(this).text(data);
+});
+</script>
+
+
+<!-- Copy Response Body To Clipboard -->
+
+<script>
+    var clipboard = new ClipboardJS('.copyButton');
+
+    clipboard.on('success', function(e) {
+        e.clearSelection();
+        $(".copyButton").addClass("bg-success text-white")
+        e.trigger.textContent = '✔ Copied!';
+        window.setTimeout(function() {
+            $(".copyButton").removeClass("bg-success text-white")
+            e.trigger.textContent = 'Copy to Clipboard';
+        }, 2000);
+    });
+    clipboard.on('error', function(e) {
+        e.clearSelection();
+        $(".copyButton").addClass("bg-danger text-white")
+        e.trigger.textContent = '✗ Not Copied';
+        window.setTimeout(function() {
+            $(".copyButton").removeClass("bg-danger text-white")
+            e.trigger.textContent = 'Copy to Clipboard';
+        }, 2000);
+    });
+
+</script>
+
+<!-- Render the Description Markdown and link in the test failures -->
+
+<script>
+    const remarkable = new Remarkable();
+
+    const descriptions = document.querySelectorAll(".renderMarkdown");
+    descriptions.forEach(description => {
+        description.innerHTML = renderHtmlFromMarkdown(description.textContent);
+    });
+    function renderHtmlFromMarkdown(markdown) {
+        return remarkable.render(trim(markdown));
+    }
+    function trim(string) {
+        return string ? string.replace(/^ +| +$/gm, "") : string;
+    }
+</script>
+
+<!-- Show/Hide The Toggles When Scrolling The Page -->
+
+<script>
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+    document.getElementById("topOfRequestsScreen").style.display = "block";
+    document.getElementById("topOfFailuresScreen").style.display = "block";
+    document.getElementById("topOfSkippedScreen").style.display = "block";
+    document.getElementById("openAll").style.display = "none";
+    document.getElementById("openAllRequests").style.display = "none";
+
+
+  } else {
+    document.getElementById("topOfRequestsScreen").style.display = "none";
+    document.getElementById("topOfFailuresScreen").style.display = "none";
+    document.getElementById("topOfSkippedScreen").style.display = "none";
+    document.getElementById("openAll").style.display = "block";
+    document.getElementById("openAllRequests").style.display = "block";
+
+  }
+}
+
+function topFunction() {
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+}
+</script>
+
+<!-- Creates The Iteration Tabs -->
+
+<script type="text/javascript">
+    "use strict";
+
+window.onload = function () {
+
+  // set display for all blocks of response
+  var allItems = document.querySelectorAll('[class*=iteration-]');
+  allItems.forEach(function(elem){
+    elem.style.display = 'block';
+  });
+
+   
+  let totalIterations = 1;
+   
+
+  let menu = document.querySelector('#execution-menu .nav');
+
+  for(var i = 0; i < totalIterations; i++)
+  {
+    let li = document.createElement('li');
+    li.appendChild(document.createTextNode((i + 1)));
+    li.setAttribute('id', 'iteration-' + i);
+    li.classList.add("custom-tab");
+    li.classList.add("itPassed");
+
+    li.addEventListener('click', function() {
+      //set display to none for all except row
+      let allItems = document.querySelectorAll('[class*=iteration-]:not(.row)');
+      allItems.forEach(function(elem) {
+        elem.style.display = 'none';
+      })
+
+      let allMenus = document.querySelectorAll('[id*=iteration-]');
+      allMenus.forEach(function(elem){
+        elem.style.borderBottom = 'none';
+      })
+
+      this.style.borderBottom = 'solid 3px #032a33';
+
+      let items = document.querySelectorAll("." + this.id + ':not(.row)');
+      items.forEach(function(elem) {
+        elem.style.display = elem.style.display == 'block' ? 'none' : 'block';
+      })
+    });
+    menu.appendChild(li);
+  }
+
+  //shows first tab data
+  document.getElementById('iteration-0').click();
+  document.getElementById('iterationSelected').innerHTML = `Iteration ${document.getElementById('iteration-0').innerHTML} selected`
+
+}
+</script>
+
+<!-- Create the Selected Iteration Label -->
+
+<script>
+$(document).ready(function(){
+    $(function() {
+        $("#iterationList li").click(function() {
+            document.getElementById('iterationSelected').innerHTML = "Iteration " + this.innerHTML + " selected"
+        });
+    });
+});
+</script>
+
+<!-- Filter Action for the Iterations -->
+
+<script>
+$("#filterInput").on("input paste", function() {
+    var value = $(this).val();
+    $("#iterationList li").filter(function() {
+	    $("#showOnlyFailures").data("clickCount") ? $("#showOnlyFailures").click():null;
+        $(this).toggle($(this).text().indexOf(value) > -1)
+    });
+});
+</script>
+
+<!-- Showing the Failed Interations -->
+
+<script>
+$('#showOnlyFailures').on('click', function(e) {
+    let clickCount = $(this).data("clickCount") || 1
+	$("#filterInput").val()!="" && clickCount==1 ? $("#filterInput").val('').trigger('input'): null;
+    let selectedIteration = $('#iterationList li').filter(function () {
+        return $(this).css('border-bottom').indexOf("solid") > -1 && $(this).hasClass('itFailed');
+    });
+    selectedIteration.length || clickCount > 1 ? null : $("#iterationList li.itFailed")[0].click()
+    $("#iterationList li.itPassed").toggle()
+    $("div.bg-success [id*=requests]").parents('[class^="row iteration-"]').toggle();
+    clickCount = clickCount > 1 ? 1 : ++clickCount;
+    clickCount > 1 ? $("#showOnlyFailures").html("Show All Iterations") : $("#showOnlyFailures").html("Show Failed Iterations");
+    $(this).data("clickCount", clickCount)
+})
+</script>
+</body>
+</html>
